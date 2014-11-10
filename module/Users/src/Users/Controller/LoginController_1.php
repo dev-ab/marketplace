@@ -22,37 +22,33 @@ class LoginController extends AbstractActionController {
             return $this->redirect()->toRoute(NULL, array(
                         'controller' => 'login',
                         'action' => 'index'
-            ));
+                    ));
         }
         $post = $this->request->getPost();
         $form = $this->getServiceLocator()->get('LoginForm');
         $form->setData($post);
         if (!$form->isValid()) {
             $model = new ViewModel(array(
-                'error' => true,
-                'form' => $form,
-            ));
+                        'error' => true,
+                        'form' => $form,
+                    ));
             $model->setTemplate('users/login/index');
             return $model;
         }
-        $result = $this->getAuthService()->authenticateUser($this->request->getPost('email'), $this->request->getPost('password'));
-        var_dump($result);
+        $this->getAuthService()->getAdapter()->
+                setIdentity($this->request->getPost('email'))->setCredential($this->request->getPost('password'));
+        $result = $this->getAuthService()->authenticate();
         if ($result->isValid()) {
-            echo 'success';
-            return;
             $this->getAuthService()->getStorage()->write($this->request->getPost('email'));
             return $this->redirect()->toRoute(NULL, array(
                         'controller' => 'login',
                         'action' => 'confirm'
-            ));
+                    ));
         }
     }
 
     public function confirmAction() {
         $user_email = $this->getAuthService()->getStorage()->read();
-        $factory = new \Support\Factory\TableGatewayFactory();
-        print_r($factory);
-        
         $viewModel = new ViewModel(array('user_email' => $user_email));
         return $viewModel;
     }

@@ -3,8 +3,10 @@
 namespace Support\Fetch;
 
 use Support\Factory\TableGatewayFactory;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-class Model {
+class Model implements ServiceLocatorAwareInterface {
 
     protected $tables = array();
 
@@ -21,5 +23,12 @@ class Model {
         return new $table_name($tableGateway);
     }
 
-}
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+        $this->ServiceLocator = $serviceLocator;
+    }
 
+    public function getServiceLocator() {
+        return $this->ServiceLocator;
+    }
+
+}

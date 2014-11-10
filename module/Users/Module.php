@@ -8,8 +8,7 @@ use Users\Model\User;
 use Users\Model\UserTable;
 use Users\Model\Upload;
 use Users\Model\UploadTable;
-use Zend\Authentication\AuthenticationService;
-use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
+use Support\General\Authentication;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\ModuleRouteListener;
 
@@ -21,12 +20,12 @@ class Module {
         //$moduleRouteListener->attach($eventManager);
         $sharedEventManager = $eventManager->getSharedManager(); // The shared event manager
         $sharedEventManager->attach(__NAMESPACE__, MvcEvent::EVENT_DISPATCH, function($e) {
-                    $controller = $e->getTarget(); // The controller which is dispatched
-                    $controllerName = $controller->getEvent()->getRouteMatch()->getParam('controller');
-                    if (!in_array($controllerName, array('Users\Controller\Index', 'Users\Controller\Register', 'Users\Controller\Login'))) {
-                        $controller->layout('layout/myaccount');
-                    }
-                });
+            $controller = $e->getTarget(); // The controller which is dispatched
+            $controllerName = $controller->getEvent()->getRouteMatch()->getParam('controller');
+            if (!in_array($controllerName, array('Users\Controller\Index', 'Users\Controller\Register', 'Users\Controller\Login'))) {
+                $controller->layout('layout/myaccount');
+            }
+        });
     }
 
     public function getAutoloaderConfig() {
@@ -125,16 +124,10 @@ class Module {
                 'UploadFilter' => function ($sm) {
                     return new \Users\Form\UploadFilter();
                 },
-                'dbTableAuthAdapter' => function($sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    $dbTableAuthAdapter = new DbTableAuthAdapter($dbAdapter, 'user', 'email', 'password', 'MD5(?)');
-                    return $dbTableAuthAdapter;
-                },
                 'authService' => function($sm) {
-                    $authService = new AuthenticationService();
-                    $authService->setAdapter($sm->get('dbTableAuthAdapter'));
-                    return $authService;
+                    return new Authentication();
                 },
+                'tableFactory' => 'Support\Factory\TableGatewayFactory'
             ),
             'invokables' => array(),
             'services' => array(),
