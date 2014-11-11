@@ -1,6 +1,6 @@
 <?php
 
-namespace Users\Form;
+namespace Support\Form;
 
 use Zend\InputFilter\InputFilter;
 

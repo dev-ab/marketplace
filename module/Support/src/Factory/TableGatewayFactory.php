@@ -9,20 +9,42 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class TableGatewayFactory implements FactoryInterface {
 
+    protected $Tablename;
+    protected $Entity;
+    protected $Adapter;
+    protected $DbAdapter;
+    protected $ServiceLocator;
+
     public function createService(ServiceLocatorInterface $serviceLocator) {
-        return $serviceLocator;
+        $this->ServiceLocator = $serviceLocator;
+        return $this;
     }
 
-    public function generateTableGateway($tablename, $entity, $adapter = null) {
-        if (!$adapter) {
-            $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+    public function generateTableGateway() {
+        if (!$this->Adapter) {
+            $this->DbAdapter = $this->ServiceLocator->get('Zend\Db\Adapter\Adapter');
         } else {
-            $dbAdapter = $this->getServiceLocator()->get($adapter);
+            $this->DbAdapter = $this->ServiceLocator->get($this->Adapter);
         }
 
+        if (!$this->Tablename || !$this->Entity) {
+            return false;
+        }
         $resultSetPrototype = new ResultSet();
-        $resultSetPrototype->setArrayObjectPrototype($entity);
-        return new TableGateway($tablename, $dbAdapter, null, $resultSetPrototype);
+        $resultSetPrototype->setArrayObjectPrototype($this->Entity);
+        return new TableGateway($this->Tablename, $this->DbAdapter, null, $resultSetPrototype);
+    }
+
+    public function setTablename($tablename) {
+        $this->Tablename = $tablename;
+    }
+
+    public function setEntity($entity) {
+        $this->Entity = $entity;
+    }
+
+    public function setAdapter($adapter) {
+        $this->Adapter = $adapter;
     }
 
 }

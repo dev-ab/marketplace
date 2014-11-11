@@ -20,12 +20,12 @@ class Module {
         //$moduleRouteListener->attach($eventManager);
         $sharedEventManager = $eventManager->getSharedManager(); // The shared event manager
         $sharedEventManager->attach(__NAMESPACE__, MvcEvent::EVENT_DISPATCH, function($e) {
-            $controller = $e->getTarget(); // The controller which is dispatched
-            $controllerName = $controller->getEvent()->getRouteMatch()->getParam('controller');
-            if (!in_array($controllerName, array('Users\Controller\Index', 'Users\Controller\Register', 'Users\Controller\Login'))) {
-                $controller->layout('layout/myaccount');
-            }
-        });
+                    $controller = $e->getTarget(); // The controller which is dispatched
+                    $controllerName = $controller->getEvent()->getRouteMatch()->getParam('controller');
+                    if (!in_array($controllerName, array('Users\Controller\Index', 'Users\Controller\Register', 'Users\Controller\Login'))) {
+                        $controller->layout('layout/myaccount');
+                    }
+                });
     }
 
     public function getAutoloaderConfig() {
@@ -124,10 +124,6 @@ class Module {
                 'UploadFilter' => function ($sm) {
                     return new \Users\Form\UploadFilter();
                 },
-                'authService' => function($sm) {
-                    return new Authentication();
-                },
-                'tableFactory' => 'Support\Factory\TableGatewayFactory'
             ),
             'invokables' => array(),
             'services' => array(),
