@@ -22,9 +22,8 @@ class Module {
             'factories' => array(
                 //Factory
                 'TableGatewayFactory' => 'Support\Factory\TableGatewayFactory',
-                //Fetch
-                'Model' => 'Support\Fetch\Model',
-                'Form' => 'Support\Fetch\Form',
+                'ModelFactory' => 'Support\Factory\Model',
+                'FormFactory' => 'Support\Factory\Form',
                 //General
                 'AuthService' => 'Support\General\Authentication',
             ),

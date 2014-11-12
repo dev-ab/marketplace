@@ -1,6 +1,6 @@
 <?php
 
-namespace Support\Fetch;
+namespace Support\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Support\Factory\TableGatewayFactory;

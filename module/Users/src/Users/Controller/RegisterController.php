@@ -4,17 +4,14 @@ namespace Users\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Users\Form\RegisterForm;
-use Users\Form\RegisterFilter;
-use Users\Model\User;
-use Users\Model\UserTable;
 
 class RegisterController extends AbstractActionController {
 
     public function indexAction() {
-        $form = new RegisterForm();
+        $form = $this->getServiceLocator()->get('FormFactory');
+        $registerForm = $form->getForm('Register');
         $viewModel = new ViewModel(array('form' =>
-                    $form));
+                    $registerForm));
         return $viewModel;
     }
 
@@ -25,19 +22,19 @@ class RegisterController extends AbstractActionController {
                     ));
         }
         $post = $this->request->getPost();
-        $form = new RegisterForm();
-        $inputFilter = new RegisterFilter();
-        $form->setInputFilter($inputFilter);
-        $form->setData($post);
-        if (!$form->isValid()) {
+        $form = $this->getServiceLocator()->get('FormFactory');
+        $registerForm = $form->getForm('Register');
+        $registerForm->setData($post);
+        if (!$registerForm->isValid()) {
+            print_r($registerForm->getMessages());
             $model = new ViewModel(array(
                         'error' => true,
-                        'form' => $form,
+                        'form' => $registerForm,
                     ));
             $model->setTemplate('users/register/index');
             return $model;
         }
-        $this->createUser($form->getData());
+        $this->createUser($registerForm->getData());
         return $this->redirect()->toRoute(NULL, array(
                     'controller' => 'register',
                     'action' => 'confirm'
@@ -50,11 +47,9 @@ class RegisterController extends AbstractActionController {
     }
 
     protected function createUser(array $data) {
-        $user = new User();
-        $user->exchangeArray($data);
-        $userTable = $this->getServiceLocator()->get('UserTable');
-        $userTable->saveUser($user);
-
+        $model = $this->getServiceLocator()->get('ModelFactory');
+        $userTable = $model->getTable('Users');
+        $userTable->saveUser($data);
         return true;
     }
 

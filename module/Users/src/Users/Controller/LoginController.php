@@ -11,7 +11,7 @@ class LoginController extends AbstractActionController {
     public $authservice;
 
     public function indexAction() {
-        $form = $this->getServiceLocator()->get('Form');
+        $form = $this->getServiceLocator()->get('FormFactory');
         $loginForm = $form->getForm('Login');
         $viewModel = new ViewModel(array('form' => $loginForm));
         return $viewModel;
@@ -25,7 +25,7 @@ class LoginController extends AbstractActionController {
                     ));
         }
         $post = $this->request->getPost();
-        $form = $this->getServiceLocator()->get('Form');
+        $form = $this->getServiceLocator()->get('FormFactory');
         $loginForm = $form->getForm('Login');
         //$loginForm->setInputFilter(new LoginFilter());
         $loginForm->setData($post);

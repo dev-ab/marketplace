@@ -13,18 +13,28 @@
     $form->setAttribute('action', $this->url(NULL, array('controller' => 'Register', 'action' => 'process')));
     $form->setAttribute('method', 'post');
     echo $this->form()->openTag($form);
+    echo $this->formElement($form->get('id'));
     ?>
     <dl class="zend_form">
-        <dt><?php echo $this->formLabel($form->get('name')); ?></dt>
+        <dt><?php echo $this->formLabel($form->get('fullname')); ?></dt>
         <dd><?php
-    echo $this->formElement($form->get('name'));
-    echo $this->formElementErrors($form->get('name'));
+    echo $this->formElement($form->get('fullname'));
+    echo $this->formElementErrors($form->get('fullname'));
     ?></dd>
-        <dt><?php echo $this->formLabel($form->get('email')); ?></
-        dt>
+        <dt><?php echo $this->formLabel($form->get('email')); ?></dt>
         <dd><?php
             echo $this->formElement($form->get('email'));
-            echo $this->formElementErrors($form->get('email'));
+            echo $this->translate($this->formElementErrors($form->get('email')));
+    ?></dd>
+        <dt><?php echo $this->formLabel($form->get('phone')); ?></dt>
+        <dd><?php
+            echo $this->formElement($form->get('phone'));
+            echo $this->translate($this->formElementErrors($form->get('phone')));
+    ?></dd>
+        <dt><?php echo $this->formLabel($form->get('country')); ?></dt>
+        <dd><?php
+            echo $this->formElement($form->get('country'));
+            echo $this->translate($this->formElementErrors($form->get('country')));
     ?></dd>
         <dt><?php echo $this->formLabel($form->get('password'));
     ?></dt>
@@ -36,6 +46,11 @@
         <dd><?php
             echo $this->formElement($form->get('confirm_password'));
             echo $this->formElementErrors($form->get('confirm_password'));
+    ?></dd>
+        <dt><?php echo $this->formLabel($form->get('captcha')); ?></dt>
+        <dd><?php
+            echo $this->formElement($form->get('captcha'));
+            echo $this->formElementErrors($form->get('captcha'));
     ?></dd>
         <dd><?php
             echo $this->formElement($form->get('submit'));

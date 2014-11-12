@@ -4,7 +4,7 @@ namespace Support\Table;
 
 use Zend\Db\TableGateway\TableGatewayInterface;
 
-class UsersTable {
+class CountriesTable {
 
     protected $tableGateway;
 
@@ -17,7 +17,7 @@ class UsersTable {
         return $resultSet;
     }
 
-    public function getUser($id) {
+    public function getCountry($id) {
         $id = (int) $id;
         $rowset = $this->tableGateway->select(array('id' => $id));
         $row = $rowset->current();
@@ -27,12 +27,12 @@ class UsersTable {
         return $row;
     }
 
-    public function saveUser($data) {
+    public function saveCountry($data) {
         $id = (int) $data['id'];
         if ($id == 0) {
             $this->tableGateway->insert($data);
         } else {
-            if ($this->getUser($id)) {
+            if ($this->getCountry($id)) {
                 $this->tableGateway->update($data, array('id' => $id));
             } else {
                 throw new \Exception('Form id does not exist');

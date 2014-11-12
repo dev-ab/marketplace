@@ -1,9 +1,10 @@
 <?php
 
-namespace Support\Fetch;
+namespace Support\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 class Form implements FactoryInterface {
 
@@ -15,12 +16,17 @@ class Form implements FactoryInterface {
         return $this;
     }
 
-    public function getForm($formName) {
+    public function getForm($formName, $filter = true) {
         $formObject = "Support\\Form\\" . $formName . 'Form';
         $filterObject = "Support\\Form\\" . $formName . 'Filter';
 
         $formInstance = new $formObject();
-        $formInstance->setInputFilter(new $filterObject());
+        if ($formInstance instanceof ServiceLocatorAwareInterface)
+            $formInstance->setServiceLocator($this->ServiceLocator);
+        $formInstance->prepareElements();
+
+        if ($filter)
+            $formInstance->setInputFilter(new $filterObject());
 
         return $formInstance;
     }
