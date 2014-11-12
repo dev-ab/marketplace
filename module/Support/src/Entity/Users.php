@@ -4,8 +4,14 @@ namespace Support\Entity;
 
 class Users {
 
-    public function exchangeArray() {
-        
+    protected $id;
+    protected $fullname;
+    protected $email;
+
+    public function exchangeArray($data) {
+        $this->id = isset($data['id']) ? $data['id'] : null;
+        $this->fullname = isset($data['fullname']) ? $data['fullname'] : null;
+        $this->email = isset($data['email']) ? $data['email'] : null;
     }
 
     public function getArrayCopy() {
@@ -13,4 +19,3 @@ class Users {
     }
 
 }
-

@@ -3,13 +3,17 @@
 namespace Support\Table;
 
 use Zend\Db\TableGateway\TableGatewayInterface;
+use Zend\Stdlib\Hydrator\ArraySerializable;
+use Support\Entity\Users;
 
 class UsersTable {
 
     protected $tableGateway;
+    protected $hydrator;
 
     public function __construct(TableGatewayInterface $tableGateway) {
         $this->tableGateway = $tableGateway;
+        $this->hydrator = new ArraySerializable();
     }
 
     public function fetchAll() {
@@ -27,7 +31,10 @@ class UsersTable {
         return $row;
     }
 
-    public function saveUser($data) {
+    public function saveUser(Users $user) {
+        $data = $this->hydrator->extract($user);
+        print_r($data);
+        return
         $id = (int) $data['id'];
         if ($id == 0) {
             $this->tableGateway->insert($data);
@@ -40,5 +47,17 @@ class UsersTable {
         }
     }
 
-}
+    public function prepareData($data) {
+        $preparedData = array();
+        $preparedData['id'] = $data['id'];
+        $preparedData[] = $data['id'];
+        $preparedData[] = $data['id'];
+        $preparedData[] = $data['id'];
+        $preparedData[] = $data['id'];
 
+
+
+        return $preparedData;
+    }
+
+}

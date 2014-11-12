@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.2.2
+-- version 4.1.12
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 09, 2014 at 12:37 PM
--- Server version: 5.5.27
--- PHP Version: 5.4.7
+-- Generation Time: Nov 12, 2014 at 11:01 PM
+-- Server version: 5.6.16
+-- PHP Version: 5.5.11
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -19,6 +19,26 @@ SET time_zone = "+00:00";
 --
 -- Database: `marketplace`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `countries`
+--
+
+CREATE TABLE IF NOT EXISTS `countries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `country_name` varchar(60) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `countries`
+--
+
+INSERT INTO `countries` (`id`, `country_name`) VALUES
+(1, 'Egypt'),
+(2, 'United States');
 
 -- --------------------------------------------------------
 
@@ -130,6 +150,7 @@ CREATE TABLE IF NOT EXISTS `services_requests` (
   `user_id` int(11) NOT NULL,
   `type` enum('standard','custom') NOT NULL,
   `service_id` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
   `time` int(11) NOT NULL,
   `date` int(11) NOT NULL,
   PRIMARY KEY (`id`)
@@ -254,13 +275,21 @@ CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(160) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `salt` varchar(255) NOT NULL,
   `fullname` text NOT NULL,
   `phone` bigint(20) NOT NULL,
   `country` int(11) NOT NULL,
   `time` int(11) NOT NULL,
   `date` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `password`, `salt`, `fullname`, `phone`, `country`, `time`, `date`) VALUES
+(1, 'hellboy0nline@yahoo.com', '3007c115f2b0f5f23c0ae056ddf1c4e2', 'abcdefg', 'abdou habibi', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 

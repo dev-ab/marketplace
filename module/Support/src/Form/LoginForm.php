@@ -8,6 +8,9 @@ class LoginForm extends Form {
 
     public function __construct($name = null) {
         parent::__construct('Login');
+    }
+
+    public function prepareElements() {
         $this->setAttribute('method', 'post');
         $this->setAttribute('enctype', 'multipart/formdata');
 
