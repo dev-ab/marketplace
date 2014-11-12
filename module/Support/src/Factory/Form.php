@@ -24,6 +24,7 @@ class Form implements FactoryInterface {
         if ($formInstance instanceof ServiceLocatorAwareInterface)
             $formInstance->setServiceLocator($this->ServiceLocator);
         $formInstance->prepareElements();
+        
 
         if ($filter)
             $formInstance->setInputFilter(new $filterObject());
