@@ -2,11 +2,11 @@
 
 namespace Support\Entity;
 
-class Countries {
+class Notifications {
 
     protected $id;
-    protected $countryName;
-    protected $userid;
+    protected $notification;
+    protected $userId;
     protected $type;
     protected $target;
     protected $time;
@@ -30,13 +30,13 @@ class Countries {
         return $this->notification;
     }
 
-    public function setUserid($userid) {
-        $this->userid = $userid;
+    public function setUserId($userId) {
+        $this->userId = $userId;
         return $this;
     }
 
-    public function getUser_id() {
-        return $this->userid;
+    public function getUserId() {
+        return $this->userId;
     }
 
     public function setType($type) {

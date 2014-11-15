@@ -2,13 +2,12 @@
 
 namespace Support\Entity;
 
-class Countries {
+class ServicesCategories {
 
     protected $id;
-    protected $countryName;
-    protected $userid;
+    protected $categoryName;
+    protected $icon;
     protected $type;
-    protected $target;
     protected $time;
     protected $date;
 
@@ -21,22 +20,22 @@ class Countries {
         return $this->id;
     }
 
-    public function setNotification($notification) {
-        $this->notification = $notification;
+    public function setCategoryName($categoryName) {
+        $this->categoryName = $categoryName;
         return $this;
     }
 
-    public function getNotification() {
-        return $this->notification;
+    public function getCategoryName() {
+        return $this->categoryName;
     }
 
-    public function setUserid($userid) {
-        $this->userid = $userid;
+    public function setIcon($icon) {
+        $this->icon = $icon;
         return $this;
     }
 
-    public function getUser_id() {
-        return $this->userid;
+    public function geIcon() {
+        return $this->icon;
     }
 
     public function setType($type) {
@@ -46,15 +45,6 @@ class Countries {
 
     public function getType() {
         return $this->type;
-    }
-
-    public function setTarget($target) {
-        $this->target = $target;
-        return $this;
-    }
-
-    public function getTarget() {
-        return $this->target;
     }
 
     public function setTime($time) {
