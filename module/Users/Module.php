@@ -101,7 +101,7 @@ class Module {
                     $form->setInputFilter($sm->get('LoginFilter'));
                     return $form;
                 },
-                'RegisterForm' => function ($sm) {
+                'RegisterForms' => function ($sm) {
                     $form = new \Users\Form\RegisterForm();
                     $form->setInputFilter($sm->get('RegisterFilter'));
                     return $form;

@@ -4,7 +4,8 @@ namespace Support\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\ResultSet\HydratingResultSet;
+use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class TableGatewayFactory implements FactoryInterface {
@@ -30,8 +31,10 @@ class TableGatewayFactory implements FactoryInterface {
         if (!$this->Tablename || !$this->Entity) {
             return false;
         }
-        $resultSetPrototype = new ResultSet();
-        $resultSetPrototype->setArrayObjectPrototype($this->Entity);
+        $resultSetPrototype = new HydratingResultSet();
+        $resultSetPrototype->setHydrator(new ClassMethods());
+        $resultSetPrototype->setObjectPrototype($this->Entity);
+
         return new TableGateway($this->Tablename, $this->DbAdapter, null, $resultSetPrototype);
     }
 

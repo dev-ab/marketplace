@@ -2,7 +2,9 @@
 
 namespace Support;
 
-class Module {
+use Zend\ModuleManager\Feature\FormElementProviderInterface;
+
+class Module implements FormElementProviderInterface {
 
     public function getAutoloaderConfig() {
         return array(
@@ -27,6 +29,14 @@ class Module {
                 //General
                 'AuthService' => 'Support\General\Authentication',
             ),
+        );
+    }
+
+    public function getFormElementConfig() {
+        return array(
+            'invokables' => array(
+               // 'UsersFieldset' => 'Support\Form\UsersFieldset'
+            )
         );
     }
 

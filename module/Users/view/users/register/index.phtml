@@ -13,34 +13,34 @@
     $form->setAttribute('action', $this->url(NULL, array('controller' => 'Register', 'action' => 'process')));
     $form->setAttribute('method', 'post');
     echo $this->form()->openTag($form);
-    echo $this->formElement($form->get('id'));
+    $user = $form->get('user');
     ?>
     <dl class="zend_form">
-        <dt><?php echo $this->formLabel($form->get('fullname')); ?></dt>
+        <dt><?php echo $this->formLabel($user->get('fullName')); ?></dt>
         <dd><?php
-    echo $this->formElement($form->get('fullname'));
-    echo $this->formElementErrors($form->get('fullname'));
+    echo $this->formElement($user->get('fullName'));
+    echo $this->translate($this->formElementErrors($user->get('fullName')));
     ?></dd>
-        <dt><?php echo $this->formLabel($form->get('email')); ?></dt>
+        <dt><?php echo $this->formLabel($user->get('email')); ?></dt>
         <dd><?php
-            echo $this->formElement($form->get('email'));
-            echo $this->translate($this->formElementErrors($form->get('email')));
+            echo $this->formElement($user->get('email'));
+            echo $this->translate($this->formElementErrors($user->get('email')));
     ?></dd>
-        <dt><?php echo $this->formLabel($form->get('phone')); ?></dt>
+        <dt><?php echo $this->formLabel($user->get('phone')); ?></dt>
         <dd><?php
-            echo $this->formElement($form->get('phone'));
-            echo $this->translate($this->formElementErrors($form->get('phone')));
+            echo $this->formElement($user->get('phone'));
+            echo $this->translate($this->formElementErrors($user->get('phone')));
     ?></dd>
-        <dt><?php echo $this->formLabel($form->get('country')); ?></dt>
+        <dt><?php echo $this->formLabel($user->get('country')); ?></dt>
         <dd><?php
-            echo $this->formElement($form->get('country'));
-            echo $this->translate($this->formElementErrors($form->get('country')));
+            echo $this->formElement($user->get('country'));
+            echo $this->translate($this->formElementErrors($user->get('country')));
     ?></dd>
-        <dt><?php echo $this->formLabel($form->get('password'));
+        <dt><?php echo $this->formLabel($user->get('password'));
     ?></dt>
         <dd><?php
-        echo $this->formElement($form->get('password'));
-        echo $this->formElementErrors($form->get('password'));
+        echo $this->formElement($user->get('password'));
+        echo $this->formElementErrors($user->get('password'));
     ?></dd>
         <dt><?php echo $this->formLabel($form->get('confirm_password')); ?></dt>
         <dd><?php

@@ -6,8 +6,10 @@ use Zend\Form\Form;
 use Zend\Captcha;
 use Zend\InputFilter\InputFilter;
 use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
-class RegisterForm extends Form implements \Zend\ServiceManager\ServiceLocatorAwareInterface {
+class RegisterForm extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface {
 
     protected $ServiceLocator;
 
@@ -21,6 +23,7 @@ class RegisterForm extends Form implements \Zend\ServiceManager\ServiceLocatorAw
                 ->setInputFilter(new InputFilter());
         $this->setAttribute('enctype', 'multipart/formdata');
         $this->add(array(
+            'name' => 'user',
             'type' => 'Support\Form\UsersFieldset',
             'options' => array(
                 'use_as_base_fieldset' => true
@@ -36,9 +39,7 @@ class RegisterForm extends Form implements \Zend\ServiceManager\ServiceLocatorAw
         ));
         $this->add(array(
             'name' => 'confirm_password',
-            'attributes' => array(
-                'type' => 'password',
-            ),
+            'type' => 'password',
             'options' => array(
                 'label' => 'Confirm Password',
             ),
@@ -68,6 +69,21 @@ class RegisterForm extends Form implements \Zend\ServiceManager\ServiceLocatorAw
 
     public function setServiceLocator(\Zend\ServiceManager\ServiceLocatorInterface $serviceLocator) {
         $this->ServiceLocator = $serviceLocator;
+    }
+
+    public function getInputFilterSpecification() {
+        return array(
+            'confirm_password' => array(
+                'validators' => array(
+                    array(
+                        'name' => 'Identical',
+                        'options' => array(
+                            'token' => array('user' => 'password'),
+                        ),
+                    )
+                )
+            )
+        );
     }
 
 }

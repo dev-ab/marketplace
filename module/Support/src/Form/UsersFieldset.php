@@ -10,7 +10,7 @@ use Support\Entity\Users;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class UsersFieldset extends Fieldset implements ServiceLocatorAwareInterface {
+class UsersFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface {
 
     protected $ServiceLocator;
 
@@ -19,7 +19,7 @@ class UsersFieldset extends Fieldset implements ServiceLocatorAwareInterface {
     }
 
     public function init() {
-        //parent::init();
+        parent::init();
         $this->setHydrator(new ClassMethods(false))
                 ->setObject(new Users());
 
@@ -48,7 +48,7 @@ class UsersFieldset extends Fieldset implements ServiceLocatorAwareInterface {
             'name' => 'phone',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Email Address'
+                'label' => 'Enter Your Phone'
             ),
         ));
         $this->add(array(
@@ -63,19 +63,68 @@ class UsersFieldset extends Fieldset implements ServiceLocatorAwareInterface {
     }
 
     public function getCountries() {
-        print_r($this->getServiceLocator());
-        $model = $this->getServiceLocator()->get('ModelFactory');
+        $model = $this->getServiceLocator()->getServiceLocator()->get('ModelFactory');
         $countriesTable = $model->getTable('Countries');
         $result = $countriesTable->fetchAll()->toArray();
         $countries = array();
         foreach ($result as $index => $array) {
-            $countries[$array['id']] = $array['countryName'];
+            $countries[$array['id']] = $array['country_name'];
         }
         return $countries;
     }
 
     public function getInputFilterSpecification() {
-        
+        return array(
+            'email' => array(
+                'required' => true,
+                'validators' => array(
+                    array(
+                        'name' => 'EmailAddress',
+                        'options' => array(
+                            'domain' => true,
+                            'messages' => array(\Zend\Validator\EmailAddress::INVALID_FORMAT => 'Email address format is invalid')
+                        ),
+                    ),
+                ),
+            ),
+            'fullName' => array(
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags',
+                    ),
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min' => 2,
+                            'max' => 140,
+                        ),
+                    ),
+                ),
+            ),
+            'country' => array(
+                'required' => true,
+                'validators' => array(
+                    array(
+                        'name' => 'Digits',
+                    ),
+                ),
+            ),
+            'phone' => array(
+                'required' => true,
+                'validators' => array(
+                    array(
+                        'name' => 'Digits',
+                    ),
+                ),
+            ),
+            'password' => array(
+                'required' => true,
+            )
+        );
     }
 
     public function getServiceLocator() {

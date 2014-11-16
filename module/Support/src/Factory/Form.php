@@ -4,7 +4,6 @@ namespace Support\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 class Form implements FactoryInterface {
 
@@ -18,17 +17,9 @@ class Form implements FactoryInterface {
 
     public function getForm($formName, $filter = true) {
         $formObject = "Support\\Form\\" . $formName . 'Form';
-        $filterObject = "Support\\Form\\" . $formName . 'Filter';
-
-        $formInstance = new $formObject();
-        if ($formInstance instanceof ServiceLocatorAwareInterface)
-            $formInstance->setServiceLocator($this->ServiceLocator);
+        $formManager = $this->ServiceLocator->get('FormElementManager');
+        $formInstance = $formManager->get($formObject);
         $formInstance->prepareElements();
-        
-
-        if ($filter)
-            $formInstance->setInputFilter(new $filterObject());
-
         return $formInstance;
     }
 
