@@ -21,6 +21,7 @@ class RegisterController extends AbstractActionController {
                     ));
         }
         $post = $this->request->getPost();
+        print_r($post);
         $form = $this->getServiceLocator()->get('FormFactory');
         $registerForm = $form->getForm('Register');
         $registerForm->setData($post);

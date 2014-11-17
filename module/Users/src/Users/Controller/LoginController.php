@@ -29,7 +29,7 @@ class LoginController extends AbstractActionController {
         $loginForm = $form->getForm('Login');
         //$loginForm->setInputFilter(new LoginFilter());
         $loginForm->setData($post);
-        
+
         if (!$loginForm->isValid()) {
             $model = new ViewModel(array(
                         'error' => true,
@@ -38,8 +38,8 @@ class LoginController extends AbstractActionController {
             $model->setTemplate('users/login/index');
             return $model;
         }
-        $result = $this->getAuthService()->authenticateUser($this->request->getPost('email'), $this->request->getPost('password'));
-        var_dump($result);
+        $user = $this->request->getPost('user');
+        $result = $this->getAuthService()->authenticateUser($user['email'], $user['password']);
         if ($result->isValid()) {
             $this->getAuthService()->getStorage()->write($this->getAuthService()->getResult());
             return $this->redirect()->toRoute(NULL, array(

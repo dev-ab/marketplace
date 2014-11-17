@@ -30,6 +30,19 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
+                    'editProfile' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/editProfile',
+                            'constraints' => array(
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'id' => '[a-zA-Z0-9_-]*',),
+                            'defaults' => array(
+                                'controller' => 'Users\Controller\Index',
+                                'action' => 'editProfile',
+                            ),
+                        ),
+                    ),
                     'user-manager' => array(
                         'type' => 'Segment',
                         'options' => array(
@@ -85,7 +98,7 @@ return array(
                             ),
                         ),
                     ),
-                    'default' => array(
+                    /*'default' => array(
                         'type' => 'Segment',
                         'options' => array(
                             'route' =>
@@ -97,7 +110,7 @@ return array(
                             'defaults' => array(
                             ),
                         ),
-                    ),
+                    ),*/
                 ),
             ),
         ),

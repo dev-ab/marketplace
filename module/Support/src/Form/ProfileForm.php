@@ -9,7 +9,7 @@ use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
-class LoginForm extends Form {
+class ProfileForm extends Form {
 
     protected $ServiceLocator;
 
@@ -56,8 +56,8 @@ class LoginForm extends Form {
         $this->setValidationGroup(array(
             //'csrf',
             'user' => array(
-                'email',
-                'password',
+                'fullName',
+                'country',
             )
         ));
     }

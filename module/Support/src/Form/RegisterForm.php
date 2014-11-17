@@ -9,7 +9,7 @@ use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
-class RegisterForm extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface {
+class RegisterForm extends Form implements InputFilterProviderInterface {
 
     protected $ServiceLocator;
 
@@ -44,6 +44,11 @@ class RegisterForm extends Form implements InputFilterProviderInterface, Service
                 'label' => 'Confirm Password',
             ),
         ));
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Csrf',
+            'name' => 'csrf'
+        ));
+
         $captcha = new Captcha\Image();
         $captcha->setFont(__dir__ . '/accid___.ttf');
         $this->add(array(
@@ -63,14 +68,7 @@ class RegisterForm extends Form implements InputFilterProviderInterface, Service
         ));
     }
 
-    public function getServiceLocator() {
-        return $this->ServiceLocator;
-    }
-
-    public function setServiceLocator(\Zend\ServiceManager\ServiceLocatorInterface $serviceLocator) {
-        $this->ServiceLocator = $serviceLocator;
-    }
-
+  
     public function getInputFilterSpecification() {
         return array(
             'confirm_password' => array(

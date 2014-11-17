@@ -16,17 +16,16 @@
     $user = $form->get('user');
     ?>
     <dl class="zend_form">
-        <dt><?php echo $this->formLabel($user->get('email')); ?></
-        dt>
+        <dt><?php echo $this->formLabel($user->get('fullName')); ?></dt>
         <dd><?php
-            echo $this->formElement($user->get('email'));
-            echo $this->formElementErrors($user->get('email'));
+    echo $this->formElement($user->get('fullName'));
+    echo $this->formElementErrors($user->get('fullName'));
     ?></dd>
-        <dt><?php echo $this->formLabel($user->get('password'));
+        <dt><?php echo $this->formLabel($user->get('country'));
     ?></dt>
         <dd><?php
-        echo $this->formElement($user->get('password'));
-        echo $this->formElementErrors($user->get('password'));
+        echo $this->formElement($user->get('country'));
+        echo $this->formElementErrors($user->get('country'));
     ?></dd>
         <dd><?php
             echo $this->formElement($form->get('submit'));

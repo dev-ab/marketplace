@@ -11,4 +11,11 @@ class IndexController extends AbstractActionController {
         $view = new ViewModel();
         return $view;
     }
+
+    public function editProfileAction() {
+        $form = $this->getServiceLocator()->get('FormFactory')->getForm('Profile');
+        $view = new ViewModel(array('form'=> $form));
+        return $view;
+    }
+
 }
