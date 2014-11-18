@@ -1,4 +1,16 @@
 <section class="login">
+    <?
+    echo $this->headScript()
+            ->prependFile($this->basePath() . '/js/dropzone.js');
+    ?>
+    <script>
+        
+        $(document).ready(function(){
+            $("div#dropit").dropzone({ url: "/file" });
+        });
+        
+        
+    </script>
     <h2>Login</h2>
     <?php if ($this->error): ?>
         <p class="error">
@@ -28,11 +40,14 @@
         echo $this->formElementErrors($user->get('country'));
     ?></dd>
         <h3>Add Previous Work</h3>
-        <dd><?php
-            echo $this->formCollection($form->get('work'));
+        <div style="overflow:auto;" id="dropit">Drop Images</div>
+        <button>Add</button>
+        <?php echo $this->formCollection($form->get('work')); ?>
+        <dd dir="rtl">
+            <?php
             echo $this->formElement($form->get('submit')->setValue('Edit'));
             echo $this->formElementErrors($form->get('submit'));
-    ?></dd>
+            ?></dd>
     </dl>
     <?php echo $this->form()->closeTag() ?>
 </section>
