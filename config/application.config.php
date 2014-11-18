@@ -7,6 +7,7 @@ return array(
         'Support',
         'Album',
         'WebinoImageThumb',
+        'ZF2FileUploadExamples',
         'Users',
     ),
     // These are various options for the listeners attached to the ModuleManager

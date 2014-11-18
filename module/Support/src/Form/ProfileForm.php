@@ -29,6 +29,18 @@ class ProfileForm extends Form {
                 'use_as_base_fieldset' => true
             )
         ));
+        $this->add(array(
+            'name' => 'work',
+            'type' => 'Zend\Form\Element\Collection',
+            'options' => array(
+                'count' => 0,
+                'should_create_template' => true,
+                'allow_add' => true,
+                'target_element' => array(
+                    'type' => 'Support\Form\PortfolioFieldset'
+                )
+            )
+        ));
 
         $captcha = new Captcha\Image();
         $captcha->setFont(__dir__ . '/accid___.ttf');

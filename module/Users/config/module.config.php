@@ -30,10 +30,10 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                    'editProfile' => array(
+                    'editprofile' => array(
                         'type' => 'Literal',
                         'options' => array(
-                            'route' => '/editProfile',
+                            'route' => '/editprofile',
                             'constraints' => array(
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id' => '[a-zA-Z0-9_-]*',),

@@ -27,8 +27,10 @@
         echo $this->formElement($user->get('country'));
         echo $this->formElementErrors($user->get('country'));
     ?></dd>
+        <h3>Add Previous Work</h3>
         <dd><?php
-            echo $this->formElement($form->get('submit'));
+            echo $this->formCollection($form->get('work'));
+            echo $this->formElement($form->get('submit')->setValue('Edit'));
             echo $this->formElementErrors($form->get('submit'));
     ?></dd>
     </dl>

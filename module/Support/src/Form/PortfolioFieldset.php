@@ -6,11 +6,11 @@ use Zend\Form\Fieldset;
 //use Zend\Form\Element;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
-use Support\Entity\Users;
+use Support\Entity\UsersPortfolio;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class UsersFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface {
+class PortfolioFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface {
 
     protected $ServiceLocator;
 
@@ -21,7 +21,7 @@ class UsersFieldset extends Fieldset implements InputFilterProviderInterface, Se
     public function init() {
         parent::init();
         $this->setHydrator(new ClassMethods(false))
-                ->setObject(new Users());
+                ->setObject(new UsersPortfolio());
 
         $this->add(array(
             'name' => 'id',
@@ -31,41 +31,12 @@ class UsersFieldset extends Fieldset implements InputFilterProviderInterface, Se
             )
         ));
         $this->add(array(
-            'name' => 'email',
-            'type' => 'Email',
-            'options' => array(
-                'label' => 'Email Address'
-            ),
+            'name' => 'subject',
+            'type' => 'Hidden',
         ));
         $this->add(array(
-            'name' => 'password',
-            'type' => 'Password',
-            'options' => array(
-                'label' => 'Type Your Password'
-            ),
-        ));
-        $this->add(array(
-            'name' => 'fullName',
-            'type' => 'Text',
-            'options' => array(
-                'label' => 'Enter your full name'
-            ),
-        ));
-        $this->add(array(
-            'name' => 'phone',
-            'type' => 'Text',
-            'options' => array(
-                'label' => 'Enter Your Phone'
-            ),
-        ));
-        $this->add(array(
-            'type' => 'Select',
-            'name' => 'country',
-            'options' => array(
-                'label' => 'Where you from?',
-                'empty_option' => 'Please choose your country',
-                'value_options' => $this->getCountries(),
-            )
+            'name' => 'description',
+            'type' => 'Hidden',
         ));
     }
 
