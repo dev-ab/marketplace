@@ -34,14 +34,25 @@ return array(
                         'type' => 'Literal',
                         'options' => array(
                             'route' => '/editprofile',
-                            'constraints' => array(
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id' => '[a-zA-Z0-9_-]*',),
                             'defaults' => array(
                                 'controller' => 'Users\Controller\Index',
                                 'action' => 'editProfile',
                             ),
                         ),
+                        'child_routes' => array(
+                            'default' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '[/:action]',
+                                    'constraints' => array(
+                                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                                    ),
+                                    'defaults' => array(
+                                        'controller' => 'Users\Controller\Index',
+                                    ),
+                                ),
+                            ),
+                        )
                     ),
                     'user-manager' => array(
                         'type' => 'Segment',
@@ -98,19 +109,19 @@ return array(
                             ),
                         ),
                     ),
-                    /*'default' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' =>
-                            '/[:controller[/:action]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-                            ),
-                        ),
-                    ),*/
+                /* 'default' => array(
+                  'type' => 'Segment',
+                  'options' => array(
+                  'route' =>
+                  '/[:controller[/:action]]',
+                  'constraints' => array(
+                  'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                  'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                  ),
+                  'defaults' => array(
+                  ),
+                  ),
+                  ), */
                 ),
             ),
         ),
@@ -122,9 +133,14 @@ return array(
         'template_map' => array(
             'layout/myaccount' => __DIR__ . '/../view/layout/myaccount-layout.phtml',
         ),
+        'strategies' => array(
+            'ViewJsonStrategy',
+        ),
     ),
     'module_config' => array(
         'upload_location' => __DIR__ . '/../data/uploads',
+        'temp_portfolio' => __DIR__ . '/../data/uploads/temp_portfolio',
         'images_location' => __DIR__ . '/../data/images',
+        'users_files' => __DIR__ . '/../../../data/users',
     ),
 );

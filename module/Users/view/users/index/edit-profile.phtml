@@ -1,17 +1,111 @@
 <section class="login">
-    <?
+    <?php
     echo $this->headScript()
-            ->prependFile($this->basePath() . '/js/dropzone.js');
+            ->prependFile($this->basePath() . '/js/dropzone.js')
+            ->prependFile($this->basePath() . '/js/dropzone-custom.js')
+            ->prependFile($this->basePath() . '/js/fancybox/source/jquery.fancybox.js')
+            ->prependFile($this->basePath() . '/js/fancybox/source/jquery.fancybox.pack.js')
+            ->prependFile($this->basePath() . '/js/fancybox/source/helpers/jquery.fancybox-buttons.js')
+            ->prependFile($this->basePath() . '/js/jquery-ui.js');
+    echo $this->headLink()->prependStylesheet($this->basePath() . '/css/dropzone.css')
+            ->prependStylesheet('//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/south-street/jquery-ui.css')
+            ->prependStylesheet($this->basePath() . '/css/fancybox/jquery.fancybox.css')
+            ->prependStylesheet($this->basePath() . '/css/fancybox/helpers/jquery.fancybox-buttons.css');
     ?>
     <script>
-        
-        $(document).ready(function(){
-            $("div#dropit").dropzone({ url: "/file" });
+
+        $(document).ready(function () {
+            $(".fancybox-button").fancybox({
+                prevEffect: 'none',
+                nextEffect: 'none',
+                closeBtn: false,
+                helpers: {
+                    title: {type: 'inside'},
+                    buttons: {}
+                }
+            });
+
+            alert($('#dropit').dropzone);
+            var myDropzone = $('#dropit').dropzone({
+                maxFilesize: 2, // MB
+                maxFiles: 100,
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                parallelUploads: 100,
+                addRemoveLinks: true,
+                dictDefaultMessage: 'Drop Images (or click) here to Upload',
+                init: function () {
+                    this.on("processing", function (file) {
+                        this.options.autoProcessQueue = true;
+                    });
+                    this.on("queuecomplete", function (file) {
+                        this.options.autoProcessQueue = false;
+                    });
+                    this.on("success", function (file, response) {
+                        alert(response);
+                        $(file.previewTemplate).append('<span style="display:none;" class="server_file">' + response + '</span>');
+                    });
+                    this.on("removedfile", function (file) {
+                        var server_file = $(file.previewTemplate).children('.server_file').text();
+                        // Do a post request and pass this path and use server-side language to delete the file
+                        $.post("delete.php", {file_to_be_deleted: server_file});
+                    });
+                },
+                accept: function (file, done) {
+                    if (file.name == "4484.jpg") {
+                        done("Naha, you don't.");
+                    } else {
+                        done();
+                    }
+                }
+            });
+            Dropzone.options.dropit = {
+                maxFilesize: 2, // MB
+                maxFiles: 100,
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                parallelUploads: 100,
+                addRemoveLinks: true,
+                dictDefaultMessage: 'Drop Images (or click) here to Upload',
+                init: function () {
+                    this.on("processing", function (file) {
+                        this.options.autoProcessQueue = true;
+                    });
+                    this.on("queuecomplete", function (file) {
+                        this.options.autoProcessQueue = false;
+                    });
+                    this.on("success", function (file, response) {
+                        alert(response);
+                        $(file.previewTemplate).append('<span style="display:none;" class="server_file">' + response + '</span>');
+                    });
+                    this.on("removedfile", function (file) {
+                        var server_file = $(file.previewTemplate).children('.server_file').text();
+                        // Do a post request and pass this path and use server-side language to delete the file
+                        $.post("delete.php", {file_to_be_deleted: server_file});
+                    });
+                },
+                accept: function (file, done) {
+                    if (file.name == "4484.jpg") {
+                        done("Naha, you don't.");
+                    } else {
+                        done();
+                    }
+                }
+            };
+
+            //var myDropzone = new Dropzone("div#dropit", {url: "<?= $this->url(null, array('controller' => 'Index', 'action' => 'uploadWork')); ?>"});
+            $('#add_img').click(function (e) {
+                e.preventDefault();
+                $('#dropit').processQueue();
+                $('#dropit').reset();
+            });
         });
-        
-        
+
+
+
+
     </script>
-    <h2>Login</h2>
+    <h2>Profile Edit</h2>
     <?php if ($this->error): ?>
         <p class="error">
             There were one or more issues with your submission.
@@ -30,24 +124,57 @@
     <dl class="zend_form">
         <dt><?php echo $this->formLabel($user->get('fullName')); ?></dt>
         <dd><?php
-    echo $this->formElement($user->get('fullName'));
-    echo $this->formElementErrors($user->get('fullName'));
-    ?></dd>
+            echo $this->formElement($user->get('fullName'));
+            echo $this->formElementErrors($user->get('fullName'));
+            ?></dd>
         <dt><?php echo $this->formLabel($user->get('country'));
-    ?></dt>
+            ?></dt>
         <dd><?php
-        echo $this->formElement($user->get('country'));
-        echo $this->formElementErrors($user->get('country'));
-    ?></dd>
-        <h3>Add Previous Work</h3>
-        <div style="overflow:auto;" id="dropit">Drop Images</div>
-        <button>Add</button>
-        <?php echo $this->formCollection($form->get('work')); ?>
-        <dd dir="rtl">
+            echo $this->formElement($user->get('country'));
+            echo $this->formElementErrors($user->get('country'));
+            ?></dd>
+        <dd>
             <?php
-            echo $this->formElement($form->get('submit')->setValue('Edit'));
+            echo $this->formElement($form->get('submit')->setValue('Confirm Edit'));
             echo $this->formElementErrors($form->get('submit'));
             ?></dd>
     </dl>
     <?php echo $this->form()->closeTag() ?>
+    <h3>Add Previous Work</h3>
+
+    <form action="/file-upload" class="dropzone" id="dropit">
+        <input name="title" type="text" placeholder="Enter title Here"><br><br>
+        <textarea style="width:250px;height:135px;" name="description" placeholder="Enter description here"></textarea><br><br>
+        <button id="add_img">Add</button><br><br>
+        <div class="dropzone-previews"></div>
+    </form>
+
+    <a class="fancybox-button" rel="gallery1" href="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_b.jpg" title="<b>Westfield Waterfalls - Middletown CT Lower (Graham_CS)</b><br> http://www.google.com
+       the project displays the perfect of what I used to do before I was promoted as head of development team 
+       the project displays the perfect of what I used to do before I was promoted as head of development team 
+       the project displays the perfect of what I used to do before I was promoted as head of development team
+       the project displays the perfect of what I used to do before I was promoted as head of development team
+       the project displays the perfect of what I used to do before I was promoted as head of development team">
+        <img src="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_m.jpg" alt="" />
+    </a>
+    <div style="display:none;">
+        <a class="fancybox-button" rel="gallery1" href="http://farm4.staticflickr.com/3824/9041440555_2175b32078_b.jpg" title="Calm Before The Storm (One Shoe Photography Ltd.)">
+            <img src="http://farm4.staticflickr.com/3824/9041440555_2175b32078_m.jpg" alt="" />
+        </a>
+        <a class="fancybox-button" rel="gallery1" href="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_b.jpg" title="Lambs Valley (JMImagesonline.com)">
+            <img src="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_m.jpg" alt="" />
+        </a>
+        <a class="fancybox-button" rel="gallery1" href="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_b.jpg" title="Grasmere Lake (Phil 'the link' Whittaker (gizto29))">
+            <img src="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_m.jpg" alt="" />
+        </a>
+    </div>
+    <a class="fancybox-button" rel="gallery2" href="http://farm4.staticflickr.com/3824/9041440555_2175b32078_b.jpg" title="Calm Before The Storm (One Shoe Photography Ltd.)">
+        <img src="http://farm4.staticflickr.com/3824/9041440555_2175b32078_m.jpg" alt="" />
+    </a>
+    <div style="display:none;">
+        <a class="fancybox-button" rel="gallery2" href="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_b.jpg" title="Westfield Waterfalls - Middletown CT Lower (Graham_CS)">
+            <img src="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_m.jpg" alt="" />
+        </a>
+    </div>
+
 </section>
