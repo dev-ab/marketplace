@@ -14,7 +14,8 @@
         "zendframework/zendgdata":"2.*",
         "zendframework/zendsearch":"dev-master",
         "zf-commons/zfc-user":"dev-master",
-        "cgm/zf2-file-upload-examples": ">=1.0.0"
+        "cgm/zf2-file-upload-examples": ">=1.0.0",
+        "aws/aws-sdk-php-zf2": "dev-master"
         
     }
 }

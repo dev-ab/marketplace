@@ -39,15 +39,13 @@ class IndexController extends AbstractActionController {
     }
 
     public function uploadWorkAction() {
-        $uploadFile = $this->params()->fromFiles('fileupload');
+        $file = $this->params()->fromFiles('file');
         $uploadPath = $this->getFileUploadLocation('users_files', '1/projects/2');
-        // Save Uploaded file
-        $adapter = new \Zend\File\Transfer\Adapter\Http();
-        $adapter->setDestination($uploadPath);
+        $adapter = new \Zend\File\Transfer\Adapter\http();
         $imageFileName = rand(2, 1000);
-        $adapter->addFilter('File\Rename', array('target' => $adapter->getDestination() .
+        $adapter->addFilter('File\Rename', array('target' => $uploadPath .
             DIRECTORY_SEPARATOR . $imageFileName . '.jpeg', 'overwrite' => true));
-        if ($adapter->receive($uploadFile['name'])) {
+        if ($adapter->receive($file['name'])) {
             // File upload sucessfull
             $this->generateThumbnail($imageFileName . '.jpeg', $uploadPath);
             return new \Zend\View\Model\JsonModel(array('done' => 'ok'));
