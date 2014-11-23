@@ -39,18 +39,35 @@ class IndexController extends AbstractActionController {
     }
 
     public function uploadWorkAction() {
-        $file = $this->params()->fromFiles('file');
-        $uploadPath = $this->getFileUploadLocation('users_files', '1/projects/2');
+        $user_object = $this->getAuthService()->getStorage()->read();
+        $uploadPath = $this->getFileUploadLocation('users_files', '1/portfolio/2');
         $adapter = new \Zend\File\Transfer\Adapter\http();
-        $imageFileName = rand(2, 1000);
-        $adapter->addFilter('File\Rename', array('target' => $uploadPath .
-            DIRECTORY_SEPARATOR . $imageFileName . '.jpeg', 'overwrite' => true));
-        if ($adapter->receive($file['name'])) {
-            // File upload sucessfull
-            $this->generateThumbnail($imageFileName . '.jpeg', $uploadPath);
-            return new \Zend\View\Model\JsonModel(array('done' => 'ok'));
+        $files = $adapter->getFileInfo();
+        $adapter->addValidator('IsImage', false);
+        $adapter->addValidator('ImageSize', false, array(
+            'minWidth' => 50, 'minHeight' => 50,
+            'maxWidth' => 1024, 'maxHeight' => 768,
+        ));
+        foreach ($files as $file => $fileInfo) {
+            $fileName = $fileInfo['name'];
+            $attempts = 0;
+            while (file_exists($uploadPath . DIRECTORY_SEPARATOR . $fileName)) {
+                $attempts++;
+                $fileName = rand(1, 100) . '_' . $fileInfo['name'];
+                if ($attempts >= 100)
+                    break;
+            }
+            $adapter->addFilter('File\Rename', array('target' => $uploadPath . DIRECTORY_SEPARATOR .
+                $fileName, 'overwrite' => true));
+            if ($adapter->isUploaded($file)) {
+                if ($adapter->isValid($file)) {
+                    if ($adapter->receive($file)) {
+                        $this->generateThumbnail($fileName, $uploadPath);
+                    }
+                }
+            }
         }
-        return new \Zend\View\Model\JsonModel(array('done' => 'not ok'));
+        return new \Zend\View\Model\JsonModel(array('done' => 'ok'));
     }
 
     public function generateThumbnail($imageFileName, $path) {
@@ -58,9 +75,16 @@ class IndexController extends AbstractActionController {
         $thumbnailFileName = 'tn_' . $imageFileName;
         $imageThumb = $this->getServiceLocator()->get('WebinoImageThumb');
         $thumb = $imageThumb->create($sourceImageFileName, $options = array());
-        $thumb->resize(100, 100);
+        $thumb->resize(75, 75);
         $thumb->save($path . '/' . $thumbnailFileName);
         return $thumbnailFileName;
+    }
+
+    public function getAuthService() {
+        if (!$this->authservice) {
+            $this->authservice = $this->getServiceLocator()->get('AuthService');
+        }
+        return $this->authservice;
     }
 
 }

@@ -31,6 +31,7 @@ class CountriesTable {
         $id = (int) $data['id'];
         if ($id == 0) {
             $this->tableGateway->insert($data);
+            return $this->tableGateway->getLastInsertValue();
         } else {
             if ($this->getCountry($id)) {
                 $this->tableGateway->update($data, array('id' => $id));

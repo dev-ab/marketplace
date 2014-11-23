@@ -3,17 +3,13 @@
 namespace Support\Table;
 
 use Zend\Db\TableGateway\TableGatewayInterface;
-use Zend\Stdlib\Hydrator\ArraySerializable;
-use Support\Entity\Users;
 
-class UsersTable {
+class UsersPortfolioTable {
 
     protected $tableGateway;
-    protected $hydrator;
 
     public function __construct(TableGatewayInterface $tableGateway) {
         $this->tableGateway = $tableGateway;
-        $this->hydrator = new ArraySerializable();
     }
 
     public function fetchAll() {
@@ -21,7 +17,7 @@ class UsersTable {
         return $resultSet;
     }
 
-    public function getUser($id) {
+    public function getPortfolio($id) {
         $id = (int) $id;
         $rowset = $this->tableGateway->select(array('id' => $id));
         $row = $rowset->current();
@@ -31,16 +27,13 @@ class UsersTable {
         return $row;
     }
 
-    public function saveUser(Users $user) {
-        $data = $this->hydrator->extract($user);
-        print_r($data);
-        return;
+    public function savePortfolio($data) {
         $id = (int) $data['id'];
         if ($id == 0) {
             $this->tableGateway->insert($data);
             return $this->tableGateway->getLastInsertValue();
         } else {
-            if ($this->getUser($id)) {
+            if ($this->getCountry($id)) {
                 $this->tableGateway->update($data, array('id' => $id));
             } else {
                 throw new \Exception('Form id does not exist');
@@ -48,17 +41,5 @@ class UsersTable {
         }
     }
 
-    public function prepareData($data) {
-        $preparedData = array();
-        $preparedData['id'] = $data['id'];
-        $preparedData[] = $data['id'];
-        $preparedData[] = $data['id'];
-        $preparedData[] = $data['id'];
-        $preparedData[] = $data['id'];
-
-
-
-        return $preparedData;
-    }
-
 }
+

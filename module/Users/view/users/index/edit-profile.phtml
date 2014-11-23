@@ -26,10 +26,11 @@
             });
             var myDropzone = new Dropzone("form#dropit",{
                 url: "<?= $this->url(null, array('controller' => 'Index', 'action' => 'uploadWork')); ?>",
-                maxFilesize: 2, // MB
+                //maxFilesize: 2, // MB
                 maxFiles: 100,
                 autoProcessQueue: false,
-                //uploadMultiple: true,
+                previewsContainer: '.dropzone-previews',
+                uploadMultiple: true,
                 parallelUploads: 100,
                 addRemoveLinks: true,
                 dictDefaultMessage: 'Drop Images (or click) here to Upload',
@@ -41,7 +42,7 @@
                         this.options.autoProcessQueue = false;
                     });
                     this.on("completemultiple", function (file, response) {
-                        alert(response);
+                        this.removeAllFiles();
                     });
                     
                     this.on("success", function (file, response) {
@@ -68,7 +69,7 @@
                 e.preventDefault();
                 //alert($('#dropit'));
                 myDropzone.processQueue();
-                myDropzone.reset();
+                
             });
         });
 
@@ -91,6 +92,7 @@
     $form->setAttribute('method', 'post');
     echo $this->form()->openTag($form);
     $user = $form->get('user');
+    $work = $form->get('work');
     ?>
     <dl class="zend_form">
         <dt><?php echo $this->formLabel($user->get('fullName')); ?></dt>
@@ -115,38 +117,42 @@
 
     <form class="dropzone" id="dropit">
         <div class="dropzone-previews"></div>
-        <input name="title" type="text" placeholder="Enter title Here"><br><br>
+        <input name="id" type="hidden" value="0">
+        <input name="subject" type="text" placeholder="Enter subject Here"><br><br>
         <textarea style="width:250px;height:135px;" name="description" placeholder="Enter description here"></textarea><br><br>
+        <input name="url" type="text" placeholder="Enter a link"><br><br>
         <button id="add_img">Add</button><br><br>
-
     </form>
-
-    <a class="fancybox-button" rel="gallery1" href="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_b.jpg" title="<b>Westfield Waterfalls - Middletown CT Lower (Graham_CS)</b><br> http://www.google.com
-       the project displays the perfect of what I used to do before I was promoted as head of development team 
-       the project displays the perfect of what I used to do before I was promoted as head of development team 
-       the project displays the perfect of what I used to do before I was promoted as head of development team
-       the project displays the perfect of what I used to do before I was promoted as head of development team
-       the project displays the perfect of what I used to do before I was promoted as head of development team">
-        <img src="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_m.jpg" alt="" />
-    </a>
-    <div style="display:none;">
-        <a class="fancybox-button" rel="gallery1" href="http://farm4.staticflickr.com/3824/9041440555_2175b32078_b.jpg" title="Calm Before The Storm (One Shoe Photography Ltd.)">
-            <img src="http://farm4.staticflickr.com/3824/9041440555_2175b32078_m.jpg" alt="" />
-        </a>
-        <a class="fancybox-button" rel="gallery1" href="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_b.jpg" title="Lambs Valley (JMImagesonline.com)">
-            <img src="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_m.jpg" alt="" />
-        </a>
-        <a class="fancybox-button" rel="gallery1" href="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_b.jpg" title="Grasmere Lake (Phil 'the link' Whittaker (gizto29))">
-            <img src="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_m.jpg" alt="" />
-        </a>
-    </div>
-    <a class="fancybox-button" rel="gallery2" href="http://farm4.staticflickr.com/3824/9041440555_2175b32078_b.jpg" title="Calm Before The Storm (One Shoe Photography Ltd.)">
-        <img src="http://farm4.staticflickr.com/3824/9041440555_2175b32078_m.jpg" alt="" />
-    </a>
-    <div style="display:none;">
-        <a class="fancybox-button" rel="gallery2" href="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_b.jpg" title="Westfield Waterfalls - Middletown CT Lower (Graham_CS)">
+    <div style="border: 1px solid #000;width:150px;overflow:hidden;">
+        <a class="fancybox-button" rel="gallery1" href="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_b.jpg" title="<b>Westfield Waterfalls - Middletown CT Lower (Graham_CS)</b><br> http://www.google.com
+           the project displays the perfect of what I used to do before I was promoted as head of development team 
+           the project displays the perfect of what I used to do before I was promoted as head of development team 
+           the project displays the perfect of what I used to do before I was promoted as head of development team
+           the project displays the perfect of what I used to do before I was promoted as head of development team
+           the project displays the perfect of what I used to do before I was promoted as head of development team">
             <img src="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_m.jpg" alt="" />
         </a>
+        <div style="display:none;">
+            <a class="fancybox-button" rel="gallery1" href="http://farm4.staticflickr.com/3824/9041440555_2175b32078_b.jpg" title="Calm Before The Storm (One Shoe Photography Ltd.)">
+                <img src="http://farm4.staticflickr.com/3824/9041440555_2175b32078_m.jpg" alt="" />
+            </a>
+            <a class="fancybox-button" rel="gallery1" href="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_b.jpg" title="Lambs Valley (JMImagesonline.com)">
+                <img src="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_m.jpg" alt="" />
+            </a>
+            <a class="fancybox-button" rel="gallery1" href="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_b.jpg" title="Grasmere Lake (Phil 'the link' Whittaker (gizto29))">
+                <img src="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_m.jpg" alt="" />
+            </a>
+        </div>
+    </div>
+    <div style="border: 1px solid #000;width:150px;overflow:hidden;">
+        <a class="fancybox-button" rel="gallery2" href="http://farm4.staticflickr.com/3824/9041440555_2175b32078_b.jpg" title="Calm Before The Storm (One Shoe Photography Ltd.)">
+            <img src="http://farm4.staticflickr.com/3824/9041440555_2175b32078_m.jpg" alt="" />
+        </a>
+        <div style="display:none;">
+            <a class="fancybox-button" rel="gallery2" href="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_b.jpg" title="Westfield Waterfalls - Middletown CT Lower (Graham_CS)">
+                <img src="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_m.jpg" alt="" />
+            </a>
+        </div>
     </div>
 
 </section>

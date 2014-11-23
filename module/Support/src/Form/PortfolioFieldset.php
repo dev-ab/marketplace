@@ -32,11 +32,11 @@ class PortfolioFieldset extends Fieldset implements InputFilterProviderInterface
         ));
         $this->add(array(
             'name' => 'subject',
-            'type' => 'Hidden',
+            'type' => 'Text',
         ));
         $this->add(array(
             'name' => 'description',
-            'type' => 'Hidden',
+            'type' => 'Textarea',
         ));
     }
 
