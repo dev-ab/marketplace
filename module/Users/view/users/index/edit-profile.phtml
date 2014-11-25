@@ -41,11 +41,20 @@
                     this.on("queuecomplete", function (file) {
                         this.options.autoProcessQueue = false;
                     });
-                    this.on("completemultiple", function (file, response) {
-                        this.removeAllFiles();
-                    });
-                    
-                    this.on("success", function (file, response) {
+
+                    this.on("successmultiple", function (files, response) {
+                        alert(JSON.stringify(response));
+                        /*jQuery.each(files, function(index, value) {
+                            jQuery.each(value, function(inde, valu) {
+                            alert(inde+' : '+valu); 
+                            });    
+                        });*/
+                        if(response.done == 'ok'){
+                            alert('project added successfully!');
+                            this.removeAllFiles();
+                        }else{
+                            alert('Invalid Data');
+                        }
                         $(file.previewTemplate).append('<span style="display:none;" class="server_file">' + response + '</span>');
                     });
                     
@@ -55,21 +64,27 @@
                         // Do a post request and pass this path and use server-side language to delete the file
                         $.post("delete.php", {file_to_be_deleted: server_file});
                     });
-                },
-                accept: function (file, done) {
-                    if (file.name == "4484.jpg") {
-                        done("Naha, you don't.");
-                    } else {
-                        done();
-                    }
                 }
             });
-            //var myDropzone = new Dropzone("div#dropit", {url: "<?= $this->url(null, array('controller' => 'Index', 'action' => 'uploadWork')); ?>"});
             $('#add_img').click(function (e) {
                 e.preventDefault();
-                //alert($('#dropit'));
                 myDropzone.processQueue();
-                
+            });
+            
+            $('#edit_info').click(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '<?= $this->url(null, array('controller' => 'Index', 'action' => 'processEdit')); ?>',
+                    type: 'post',
+                    data: $('#Profile').serialize(),
+                    success: function(data){
+                        if(data.done == 'ok'){
+                            alert('Info Updated!');
+                        }else{
+                            alert('Invalid Data');
+                        }
+                    }
+                });
             });
         });
 
@@ -106,21 +121,20 @@
         echo $this->formElement($user->get('country'));
         echo $this->formElementErrors($user->get('country'));
     ?></dd>
-        <dd>
-            <?php
-            echo $this->formElement($form->get('submit')->setValue('Confirm Edit'));
+        <dd><?php
+            echo $this->formElement($form->get('submit')->setValue('Edit'));
             echo $this->formElementErrors($form->get('submit'));
-            ?></dd>
+    ?></dd>
     </dl>
     <?php echo $this->form()->closeTag() ?>
     <h3>Add Previous Work</h3>
 
     <form class="dropzone" id="dropit">
         <div class="dropzone-previews"></div>
-        <input name="id" type="hidden" value="0">
-        <input name="subject" type="text" placeholder="Enter subject Here"><br><br>
-        <textarea style="width:250px;height:135px;" name="description" placeholder="Enter description here"></textarea><br><br>
-        <input name="url" type="text" placeholder="Enter a link"><br><br>
+        <input name="work[id]" type="hidden" value="0">
+        <input name="work[subject]" type="text" placeholder="Enter subject Here"><br><br>
+        <textarea style="width:250px;height:135px;" name="work[description]" placeholder="Enter description here"></textarea><br><br>
+        <input name="work[url]" type="text" placeholder="Enter a link"><br><br>
         <button id="add_img">Add</button><br><br>
     </form>
     <div style="border: 1px solid #000;width:150px;overflow:hidden;">

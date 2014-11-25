@@ -31,10 +31,7 @@ class UsersTable {
         return $row;
     }
 
-    public function saveUser(Users $user) {
-        $data = $this->hydrator->extract($user);
-        print_r($data);
-        return;
+    public function saveUser($data) {
         $id = (int) $data['id'];
         if ($id == 0) {
             $this->tableGateway->insert($data);

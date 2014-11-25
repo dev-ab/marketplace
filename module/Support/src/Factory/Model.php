@@ -19,8 +19,7 @@ class Model implements FactoryInterface {
     public function getTable($tablename, $adapter = null) {
         if (isset($this->tables[$tablename]))
             return $this->tables[$tablename];
-        $entity_name = "Support\\Entity\\" . $tablename;
-
+        $entity_name = "Support\\Entity\\" . $this->getEntityName($tablename);
         $entity = new $entity_name();
 
         $tableGatewayFactory = $this->ServiceLocator->get('TableGatewayFactory');
@@ -28,12 +27,15 @@ class Model implements FactoryInterface {
         $tableGatewayFactory->setEntity($entity);
         $tableGatewayFactory->setAdapter($adapter);
         $tableGateway = $tableGatewayFactory->generateTableGateway();
-        $table_model = "Support\\Table\\" . $tablename . 'Table';
+        $table_model = "Support\\Table\\" . $this->getEntityName($tablename) . 'Table';
         return new $table_model($tableGateway);
     }
 
     public function getEntityName($tablename) {
-        return str_replace('_', '', ucwords($tablename));
+        $pieces = explode('_', $tablename);
+        return join('', array_map(function($val) {
+                                    return ucwords($val);
+                                }, $pieces));
     }
 
 }

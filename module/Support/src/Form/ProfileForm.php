@@ -14,7 +14,7 @@ class ProfileForm extends Form {
     protected $ServiceLocator;
 
     public function __construct($name = null) {
-        parent::__construct('Register');
+        parent::__construct('Profile');
     }
 
     public function prepareElements() {
@@ -26,7 +26,7 @@ class ProfileForm extends Form {
             'name' => 'user',
             'type' => 'Support\Form\UsersFieldset',
             'options' => array(
-                'use_as_base_fieldset' => true
+                //'use_as_base_fieldset' => true
             )
         ));
         $this->add(array(
@@ -54,7 +54,8 @@ class ProfileForm extends Form {
             'name' => 'submit',
             'attributes' => array(
                 'type' => 'submit',
-                'value' => 'Register',
+                'value' => 'Edit',
+                'id' => 'edit_info'
             ),
         ));
         $this->setValidationGroup(array(

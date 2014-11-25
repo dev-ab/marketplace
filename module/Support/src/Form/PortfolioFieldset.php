@@ -53,19 +53,7 @@ class PortfolioFieldset extends Fieldset implements InputFilterProviderInterface
 
     public function getInputFilterSpecification() {
         return array(
-            'email' => array(
-                'required' => true,
-                'validators' => array(
-                    array(
-                        'name' => 'EmailAddress',
-                        'options' => array(
-                            'domain' => true,
-                            'messages' => array(\Zend\Validator\EmailAddress::INVALID_FORMAT => 'Email address format is invalid')
-                        ),
-                    ),
-                ),
-            ),
-            'fullName' => array(
+            'subject' => array(
                 'required' => true,
                 'filters' => array(
                     array(
@@ -83,25 +71,24 @@ class PortfolioFieldset extends Fieldset implements InputFilterProviderInterface
                     ),
                 ),
             ),
-            'country' => array(
+            'description' => array(
                 'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags',
+                    ),
+                ),
                 'validators' => array(
                     array(
-                        'name' => 'Digits',
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min' => 2,
+                            'max' => 140,
+                        ),
                     ),
                 ),
             ),
-            'phone' => array(
-                'required' => true,
-                'validators' => array(
-                    array(
-                        'name' => 'Digits',
-                    ),
-                ),
-            ),
-            'password' => array(
-                'required' => true,
-            )
         );
     }
 
