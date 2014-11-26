@@ -55,8 +55,6 @@ class IndexController extends AbstractActionController {
     public function uploadWorkAction() {
         $this->setInfo();
         if ($this->getRequest()->isPost()) {
-            $new_work = count($this->info['work']) + 1;
-            $uploadPath = $this->getFileUploadLocation('users_files', $this->info['user']['id'] . '/portfolio/' . $new_work);
             $adapter = new \Zend\File\Transfer\Adapter\http();
             $files = $adapter->getFileInfo();
             $adapter->addValidator('IsImage', false);
@@ -71,10 +69,12 @@ class IndexController extends AbstractActionController {
                     'description',
                 )
             ));
-            $data = $this->getRequest()->getPost();
-            //print_r($data->work);
-            $form->setData($data);
+            $form->setData($this->getRequest()->getPost());
             if ($form->isValid()) {
+                $data = $form->getData(\Zend\Form\FormInterface::VALUES_AS_ARRAY);
+                $portfolioTable = $this->getServiceLocator()->get('ModelFactory')->getTable('users_portfolio');
+                //$portfolioTable->savePortfolio();
+                $uploadPath = $this->getFileUploadLocation('users_files', $this->info['user']['id'] . '/portfolio/' . $new_work);
                 foreach ($files as $file => $fileInfo) {
                     $fileName = $fileInfo['name'];
                     $attempts = 0;
@@ -94,10 +94,7 @@ class IndexController extends AbstractActionController {
                         }
                     }
                 }
-
-                $portfolioTable = $this->getServiceLocator()->get('ModelFactory')->getTable('users_portfolio');
-                //$portfolioTable->savePortfolio();
-                return new \Zend\View\Model\JsonModel(array('done' => 'ok'));
+                return new \Zend\View\Model\JsonModel(array('done' => 'ok', 'data' => $data));
             }
             return new \Zend\View\Model\JsonModel(array('done' => 'invalid'));
         }
