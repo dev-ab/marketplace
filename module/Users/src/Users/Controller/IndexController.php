@@ -21,7 +21,7 @@ class IndexController extends AbstractActionController {
         $this->info['user'] = $hyd->extract($user);
 
         $portfolioTable = $model->getTable('users_portfolio');
-        $this->info['work'] = $portfolioTable->fetchAll();
+        $this->info['work'] = $portfolioTable->getPortfolioByUser($this->info['user']['id']);
     }
 
     public function indexAction() {
@@ -33,6 +33,13 @@ class IndexController extends AbstractActionController {
         $auth = $this->getAuthService();
         if ($auth->hasIdentity()) {
             $this->setInfo();
+            $obj = $this->info['work'];
+            $all_imgs = glob($this->getFileUploadLocation('users_files', $this->info['user']['id'] . '/portfolio/' . $obj[1]['id']) . '/*');
+            $thumbs = glob($this->getFileUploadLocation('users_files', $this->info['user']['id'] . '/portfolio/' . $obj[1]['id']) . '/tn_*');
+            $fulls = array_diff($all_imgs, $thumbs);
+            print_r($fulls);
+            print_r($obj);
+
             $form = $this->getServiceLocator()->get('FormFactory')->getForm('Profile');
             $form->setData(array('user' => $this->info['user']));
             $view = new ViewModel(array('form' => $form));
@@ -73,7 +80,11 @@ class IndexController extends AbstractActionController {
             if ($form->isValid()) {
                 $data = $form->getData(\Zend\Form\FormInterface::VALUES_AS_ARRAY);
                 $portfolioTable = $this->getServiceLocator()->get('ModelFactory')->getTable('users_portfolio');
-                //$portfolioTable->savePortfolio();
+                $data['work']['id'] = 0;
+                $data['work']['user_id'] = $this->info['user']['id'];
+                $data['work']['type'] = 1;
+                $data['work']['time'] = time();
+                $new_work = $portfolioTable->savePortfolio($data['work']);
                 $uploadPath = $this->getFileUploadLocation('users_files', $this->info['user']['id'] . '/portfolio/' . $new_work);
                 foreach ($files as $file => $fileInfo) {
                     $fileName = $fileInfo['name'];
@@ -89,7 +100,7 @@ class IndexController extends AbstractActionController {
                     if ($adapter->isUploaded($file)) {
                         if ($adapter->isValid($file)) {
                             if ($adapter->receive($file)) {
-                                $this->generateThumbnail($fileName, $uploadPath);
+                                $this->generateThumbnail($fileName, $uploadPath . '/thumbs');
                             }
                         }
                     }

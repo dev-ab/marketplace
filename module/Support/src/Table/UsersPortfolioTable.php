@@ -27,6 +27,16 @@ class UsersPortfolioTable {
         return $row;
     }
 
+    public function getPortfolioByUser($userId) {
+        $id = (int) $userId;
+        $rowset = $this->tableGateway->select(array('user_id' => $userId));
+        $rows = $rowset->toArray();
+        if (!$rows) {
+            throw new \Exception("Could not find row $id");
+        }
+        return $rows;
+    }
+
     public function savePortfolio($data) {
         $id = (int) $data['id'];
         if ($id == 0) {

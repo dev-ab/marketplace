@@ -35,7 +35,7 @@ class UsersPortfolio {
         return $this;
     }
 
-    public function geSubject() {
+    public function getSubject() {
         return $this->subject;
     }
 
@@ -44,7 +44,7 @@ class UsersPortfolio {
         return $this;
     }
 
-    public function geDescription() {
+    public function getDescription() {
         return $this->description;
     }
 
