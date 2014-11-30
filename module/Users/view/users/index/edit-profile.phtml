@@ -1,19 +1,18 @@
 <section class="login">
     <?php
-    echo $this->headScript()
+    $this->headScript()
             ->prependFile($this->basePath() . '/js/dropzone.js')
             ->prependFile($this->basePath() . '/js/dropzone-custom.js')
             ->prependFile($this->basePath() . '/js/fancybox/source/jquery.fancybox.js')
             ->prependFile($this->basePath() . '/js/fancybox/source/jquery.fancybox.pack.js')
             ->prependFile($this->basePath() . '/js/fancybox/source/helpers/jquery.fancybox-buttons.js')
             ->prependFile($this->basePath() . '/js/jquery-ui.js');
-    echo $this->headLink()->prependStylesheet($this->basePath() . '/css/dropzone.css')
+    $this->headLink()->prependStylesheet($this->basePath() . '/css/dropzone.css')
             ->prependStylesheet('//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/south-street/jquery-ui.css')
             ->prependStylesheet($this->basePath() . '/css/fancybox/jquery.fancybox.css')
             ->prependStylesheet($this->basePath() . '/css/fancybox/helpers/jquery.fancybox-buttons.css');
     ?>
     <script>
-
         $(document).ready(function () {
             $(".fancybox-button").fancybox({
                 prevEffect: 'none',
@@ -87,10 +86,6 @@
                 });
             });
         });
-
-
-
-
     </script>
     <h2>Profile Edit</h2>
     <?php if ($this->error): ?>
@@ -137,27 +132,29 @@
         <input name="work[url]" type="text" placeholder="Enter a link"><br><br>
         <button id="add_img">Add</button><br><br>
     </form>
-    <div style="border: 1px solid #000;width:150px;overflow:hidden;">
-        <a class="fancybox-button" rel="gallery1" href="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_b.jpg" title="<b>Westfield Waterfalls - Middletown CT Lower (Graham_CS)</b><br> http://www.google.com
-           the project displays the perfect of what I used to do before I was promoted as head of development team 
-           the project displays the perfect of what I used to do before I was promoted as head of development team 
-           the project displays the perfect of what I used to do before I was promoted as head of development team
-           the project displays the perfect of what I used to do before I was promoted as head of development team
-           the project displays the perfect of what I used to do before I was promoted as head of development team">
-            <img src="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_m.jpg" alt="" />
-        </a>
-        <div style="display:none;">
-            <a class="fancybox-button" rel="gallery1" href="http://farm4.staticflickr.com/3824/9041440555_2175b32078_b.jpg" title="Calm Before The Storm (One Shoe Photography Ltd.)">
-                <img src="http://farm4.staticflickr.com/3824/9041440555_2175b32078_m.jpg" alt="" />
+    <?php foreach ($work as $index => $array): ?>
+        <div style="border: 1px solid #000;width:150px;overflow:hidden;">
+            <a class="fancybox-button" rel="gallery1" href="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_b.jpg" title="<b>Westfield Waterfalls - Middletown CT Lower (Graham_CS)</b><br> http://www.google.com
+               the project displays the perfect of what I used to do before I was promoted as head of development team 
+               the project displays the perfect of what I used to do before I was promoted as head of development team 
+               the project displays the perfect of what I used to do before I was promoted as head of development team
+               the project displays the perfect of what I used to do before I was promoted as head of development team
+               the project displays the perfect of what I used to do before I was promoted as head of development team">
+                <img src="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_m.jpg" alt="" />
             </a>
-            <a class="fancybox-button" rel="gallery1" href="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_b.jpg" title="Lambs Valley (JMImagesonline.com)">
-                <img src="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_m.jpg" alt="" />
-            </a>
-            <a class="fancybox-button" rel="gallery1" href="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_b.jpg" title="Grasmere Lake (Phil 'the link' Whittaker (gizto29))">
-                <img src="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_m.jpg" alt="" />
-            </a>
+            <div style="display:none;">
+                <a class="fancybox-button" rel="gallery1" href="http://farm4.staticflickr.com/3824/9041440555_2175b32078_b.jpg" title="Calm Before The Storm (One Shoe Photography Ltd.)">
+                    <img src="http://farm4.staticflickr.com/3824/9041440555_2175b32078_m.jpg" alt="" />
+                </a>
+                <a class="fancybox-button" rel="gallery1" href="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_b.jpg" title="Lambs Valley (JMImagesonline.com)">
+                    <img src="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_m.jpg" alt="" />
+                </a>
+                <a class="fancybox-button" rel="gallery1" href="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_b.jpg" title="Grasmere Lake (Phil 'the link' Whittaker (gizto29))">
+                    <img src="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_m.jpg" alt="" />
+                </a>
+            </div>
         </div>
-    </div>
+    <?php endforeach; ?>
     <div style="border: 1px solid #000;width:150px;overflow:hidden;">
         <a class="fancybox-button" rel="gallery2" href="http://farm4.staticflickr.com/3824/9041440555_2175b32078_b.jpg" title="Calm Before The Storm (One Shoe Photography Ltd.)">
             <img src="http://farm4.staticflickr.com/3824/9041440555_2175b32078_m.jpg" alt="" />

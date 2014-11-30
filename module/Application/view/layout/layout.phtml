@@ -14,9 +14,15 @@
         <!-- Le styles -->
         <?php
         echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
-                ->prependStylesheet($this->basePath() . '/css/style.css')
-                ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
-                ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
+                ->prependStylesheet($this->basePath() . '/vintage/css/style.css')
+                ->prependStylesheet($this->basePath() . '/vintage/css/nav.css')
+                ->prependStylesheet($this->basePath() . '/vintage/css/bootstrap.css')
+                ->prependStylesheet($this->basePath() . '/vintage/css/slider.css')
+                ->prependStylesheet($this->basePath() . '/vintage/css/nav.css')
+                ->prependStylesheet($this->basePath() . '/vintage/css/animate.css')
+                ->prependStylesheet($this->basePath() . '/vintage/fonts/css/font-awesome.min.css')
+                ->prependStylesheet('http://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700,800,900')
+                ->prependStylesheet('http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300:700')
         ?>
 
         <!-- Scripts -->
@@ -26,40 +32,185 @@
                 ->prependFile($this->basePath() . '/js/jquery.min.js')
                 ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
                 ->prependFile($this->basePath() . '/js/html5shiv.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                ->prependFile($this->basePath() . '/vintage/js/modernizr.custom.js', 'text/javascript')
+                ->prependFile($this->basePath() . '/vintage/js/jquery.openCarousel.js', 'text/javascript')
+                ->prependFile($this->basePath() . '/vintage/js/wow.min.js', 'text/javascript')
+                ->prependFile($this->basePath() . '/vintage/js/jquery.cbpFWSlider.min.js', 'text/javascript')
         ;
         ?>
+        <script type="application/x-javascript">
+            addEventListener("load", function() {
+            setTimeout(hideURLbar, 0); 
+            }, false);
+            function hideURLbar(){ window.scrollTo(0,1); 
+            } 
+        </script>
+        <script>
+            $( function() {
+                $( '#cbp-fwslider' ).cbpFWSlider();
+
+            } );
+        </script>
+        <script>
+            new WOW().init();
+        </script>
+
+        <script>
+            $(function() {
+                var button = $('#loginButton');
+                var box = $('#loginBox');
+                var form = $('#loginForm');
+                button.removeAttr('href');
+                button.mouseup(function(login) {
+                    box.toggle();
+                    button.toggleClass('active');
+                });
+                form.mouseup(function() { 
+                    return false;
+                });
+                $(this).mouseup(function(login) {
+                    if(!($(login.target).parent('#loginButton').length > 0)) {
+                        button.removeClass('active');
+                        box.hide();
+                    }
+                });
+            });
+        </script>
 
     </head>
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="<?php echo $this->url('home') ?>"><img src="<?php echo $this->basePath('img/zf2-logo.png') ?>" alt="Zend Framework 2"/>&nbsp;<?php echo $this->translate('Skeleton Application') ?></a>
+        <!-- Header -->
+        <div class="header">    
+            <div class="header_top">
+                <div class="container">
+                    <div class="headertop_nav">
+                        <ul>
+                            <li><a href="#">Contact</a> /</li>
+                            <li><a href="#">Sitemap</a> /</li> 
+                            <li><a href="#l">Feedback</a> /</li> 
+                            <li><a href="#">Worldwide Locations</a></li> 
+                        </ul>
+                    </div>
+                    <div class="header-top-right">
+                        <div class="login_box">
+                            <div id="loginContainer">
+                                <a id="loginButton" class="active"><span class="active"><i class="search-icon"></i>Search</span></a>               
+                                <div id="loginBox">                
+                                    <form id="loginForm">
+                                        <div class="search_box">
+                                            <input type="text" value="Search" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search';}">
+                                            <input type="submit" value="">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
-                        <li class="active"><a href="<?php echo $this->url('users'); ?>"><?php echo $this->translate('Users') ?></a></li>
-                        <li class="active"><a href="<?php echo $this->url('users/user-manager'); ?>"><?php echo $this->translate('Users Manager') ?></a></li>
-                        <li class="active"><a href="<?php echo $this->url('users/upload-manager'); ?>"><?php echo $this->translate('Manage Documents') ?></a></li>
-                        <li class="active"><a href="<?php echo $this->url('users/group-chat'); ?>"><?php echo $this->translate('Group Chat') ?></a></li>
-                        <li class="active"><a href="<?php echo $this->url('users/media'); ?>"><?php echo $this->translate('Media') ?></a></li>
-                    </ul>
-                </div><!--/.nav-collapse -->
             </div>
-        </nav>
-        <div class="container">
-            <?php echo $this->content; ?>
-            <hr>
-            <footer>
-
-            </footer>
-        </div> <!-- /container -->
-        <?php echo $this->inlineScript() ?>
+        </div>
+        <div class="header_bottom">
+            <div class="container">	 			
+                <div class="logo">
+                    <h1><a href="<?php echo $this->url('home') ?>">Vintage<span>Restaurant</span></a></h1>
+                </div>				
+                <div class="navigation">	
+                    <div>
+                        <label class="mobile_menu" for="mobile_menu">
+                            <span>Menu</span>
+                        </label>
+                        <input id="mobile_menu" type="checkbox">
+                        <ul class="nav">
+                            <li><a href="<?php echo $this->url('home') ?>">Home</a></li>                  
+                            <li class="dropdown"><a href="<?php echo $this->url('users'); ?>">Users</a>
+                                <ul class="dropdown2">
+                                    <li><a href="<?php echo $this->url('users/editprofile'); ?>">Edit Profile</a></li>
+                                </ul>
+                            </li>             
+                            <li class="dropdown"><a href="<?php echo $this->url('users/user-manager'); ?>">User Manager</a></li>          
+                            <li class="dropdown"><a href="<?php echo $this->url('users/upload-manager'); ?>">Upload Manager</a></li>        
+                            <li><a href="<?php echo $this->url('users/group-chat'); ?>">Group Chat</a></li>
+                            <li><a href="<?php echo $this->url('users/media'); ?>">Media</a></li>
+                        </ul>
+                    </div>			
+                </div>
+                <div class="clearfix"></div>		   
+            </div>
+        </div>	
+        <div id="cbp-fwslider" class="cbp-fwslider wow fadeInLeft" data-wow-delay="0.4s" id="work">
+            <div class="slider-line"></div>
+            <ul>
+                <li><a href="#"><img src="<?php echo $this->basePath(); ?>/vintage/images/2.jpg" class="img-responsive" alt="img01"/></a></li>
+                <li><a href="#"><img src="<?php echo $this->basePath(); ?>/vintage/images/1.jpg" class="img-responsive" alt="img02"/></a></li>
+            </ul>
+        </div>
+        <!-- Ends Header -->
+        <div class="main">
+            <div class="container">
+                <?php echo $this->content; ?>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="container">   	 
+                <div class="footer_top">
+                    <div class="row">
+                        <div class="col-md-4 footer_grid">
+                            <h4>Receive our Newsletter</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                            <div class="search">
+                                <form>
+                                    <input type="text" value="">
+                                    <input type="submit" value="">
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-4 footer_grid">
+                            <h4>Twitter Feed</h4>
+                            <div class="footer-list">
+                                <ul>
+                                    <li class="list_top"><i class="fa fa-twitter twt"></i>
+                                        <p>Lorem ipsum <span class="yellow"><a href="#">consectetuer</a></span>vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatu</p></li>
+                                    <li><i class="fa fa-twitter twt"></i>
+                                        <p>Lorem ipsum <span class="yellow"><a href="#">consectetuer</a></span>vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatu</p></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-4 footer_grid">
+                            <h4>Our Address</h4>
+                            <div class="company_address">
+                                <p>500 Lorem Ipsum Dolor Sit,</p>
+                                <p>22-56-2-9 Sit Amet, Lorem,</p>
+                                <p>USA</p>
+                                <p>Phone:(00) 222 666 444</p>
+                                <p>Fax: (000) 000 00 00 0</p>
+                                <p>Email: <span><a href="mailto:info@mycompany.com">info(at)mycompany.com</a></span></p>
+                            </div>
+                            <ul class="socials">
+                                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="footer_bottom">
+                    <div class="copy_right">
+                        <p>&copy; 2013 All Rights Reseverd Designed by <a href="http://w3layouts.com/">W3layouts</a> </p>
+                    </div>
+                    <div class="footer_nav">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="#">Terms of use</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

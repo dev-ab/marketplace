@@ -39,6 +39,7 @@ return array(
                                 'action' => 'editProfile',
                             ),
                         ),
+                        'may_terminate' => true,
                         'child_routes' => array(
                             'default' => array(
                                 'type' => 'Segment',

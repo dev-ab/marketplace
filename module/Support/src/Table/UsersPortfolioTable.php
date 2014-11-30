@@ -31,9 +31,6 @@ class UsersPortfolioTable {
         $id = (int) $userId;
         $rowset = $this->tableGateway->select(array('user_id' => $userId));
         $rows = $rowset->toArray();
-        if (!$rows) {
-            throw new \Exception("Could not find row $id");
-        }
         return $rows;
     }
 

@@ -22,6 +22,11 @@ class IndexController extends AbstractActionController {
 
         $portfolioTable = $model->getTable('users_portfolio');
         $this->info['work'] = $portfolioTable->getPortfolioByUser($this->info['user']['id']);
+        foreach ($this->info['work'] as $index => $array) {
+            $all_imgs = glob($this->getFileUploadLocation('users_files', $this->info['user']['id'] . '/portfolio/' . $array['id']) . '/*');
+            $thumbs = glob($this->getFileUploadLocation('users_files', $this->info['user']['id'] . '/portfolio/' . $array['id']) . '/tn_*');
+            $this->info['work'][$index]['img'] = array_diff($all_imgs, $thumbs);
+        }
     }
 
     public function indexAction() {
@@ -33,16 +38,9 @@ class IndexController extends AbstractActionController {
         $auth = $this->getAuthService();
         if ($auth->hasIdentity()) {
             $this->setInfo();
-            $obj = $this->info['work'];
-            $all_imgs = glob($this->getFileUploadLocation('users_files', $this->info['user']['id'] . '/portfolio/' . $obj[1]['id']) . '/*');
-            $thumbs = glob($this->getFileUploadLocation('users_files', $this->info['user']['id'] . '/portfolio/' . $obj[1]['id']) . '/tn_*');
-            $fulls = array_diff($all_imgs, $thumbs);
-            print_r($fulls);
-            print_r($obj);
-
             $form = $this->getServiceLocator()->get('FormFactory')->getForm('Profile');
             $form->setData(array('user' => $this->info['user']));
-            $view = new ViewModel(array('form' => $form));
+            $view = new ViewModel(array('form' => $form, 'work' => $this->info['work']));
             return $view;
         } else {
             
@@ -100,7 +98,7 @@ class IndexController extends AbstractActionController {
                     if ($adapter->isUploaded($file)) {
                         if ($adapter->isValid($file)) {
                             if ($adapter->receive($file)) {
-                                $this->generateThumbnail($fileName, $uploadPath . '/thumbs');
+                                $this->generateThumbnail($fileName, $uploadPath);
                             }
                         }
                     }
