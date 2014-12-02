@@ -41,10 +41,10 @@ return array(
                         ),
                         'may_terminate' => true,
                         'child_routes' => array(
-                            'default' => array(
+                            'processedit' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '[/:action]',
+                                    'route' => '/[:action]',
                                     'constraints' => array(
                                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                                     ),
@@ -110,19 +110,20 @@ return array(
                             ),
                         ),
                     ),
-                /* 'default' => array(
-                  'type' => 'Segment',
-                  'options' => array(
-                  'route' =>
-                  '/[:controller[/:action]]',
-                  'constraints' => array(
-                  'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                  'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                  ),
-                  'defaults' => array(
-                  ),
-                  ),
-                  ), */
+                    'default' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' =>
+                            '/[:controller[/:action]]',
+                            'constraints' => array(
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+                            ),
+                        ),
+                        'priority' => -1000,
+                    ),
                 ),
             ),
         ),

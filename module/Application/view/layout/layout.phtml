@@ -14,28 +14,32 @@
         <!-- Le styles -->
         <?php
         echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
-                ->prependStylesheet($this->basePath() . '/vintage/css/style.css')
-                ->prependStylesheet($this->basePath() . '/vintage/css/nav.css')
-                ->prependStylesheet($this->basePath() . '/vintage/css/bootstrap.css')
-                ->prependStylesheet($this->basePath() . '/vintage/css/slider.css')
-                ->prependStylesheet($this->basePath() . '/vintage/css/nav.css')
-                ->prependStylesheet($this->basePath() . '/vintage/css/animate.css')
-                ->prependStylesheet($this->basePath() . '/vintage/fonts/css/font-awesome.min.css')
                 ->prependStylesheet('http://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700,800,900')
                 ->prependStylesheet('http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300:700')
+                ->prependStylesheet($this->basePath() . '/vintage/fonts/css/font-awesome.min.css')
+                ->prependStylesheet($this->basePath() . '/vintage/css/animate.css')
+                ->prependStylesheet($this->basePath() . '/vintage/css/nav.css')
+                ->prependStylesheet($this->basePath() . '/vintage/css/slider.css')
+                ->prependStylesheet($this->basePath() . '/vintage/css/bootstrap.css')
+                ->prependStylesheet($this->basePath() . '/vintage/css/nav.css')
+                ->prependStylesheet($this->basePath() . '/vintage/css/style.css')
+        ;
         ?>
 
         <!-- Scripts -->
         <?php
         echo $this->headScript()
-                ->prependFile($this->basePath() . '/js/bootstrap.min.js')
-                ->prependFile($this->basePath() . '/js/jquery.min.js')
-                ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
-                ->prependFile($this->basePath() . '/js/html5shiv.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                ->prependFile($this->basePath() . '/vintage/js/jquery.cbpFWSlider.min.js', 'text/javascript')
+                ->prependFile($this->basePath() . '/js/dropzone.js')
                 ->prependFile($this->basePath() . '/vintage/js/modernizr.custom.js', 'text/javascript')
                 ->prependFile($this->basePath() . '/vintage/js/jquery.openCarousel.js', 'text/javascript')
                 ->prependFile($this->basePath() . '/vintage/js/wow.min.js', 'text/javascript')
-                ->prependFile($this->basePath() . '/vintage/js/jquery.cbpFWSlider.min.js', 'text/javascript')
+                ->prependFile($this->basePath() . '/vintage/js/jquery.flexisel.js', 'text/javascript')
+                ->prependFile($this->basePath() . '/js/jquery-ui.js')
+                ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+                ->prependFile($this->basePath() . '/vintage/js/jquery.min.js')
+                ->prependFile($this->basePath() . '/js/jquery.js')
+
         ;
         ?>
         <script type="application/x-javascript">
@@ -50,12 +54,9 @@
                 $( '#cbp-fwslider' ).cbpFWSlider();
 
             } );
-        </script>
-        <script>
+            
             new WOW().init();
-        </script>
-
-        <script>
+                
             $(function() {
                 var button = $('#loginButton');
                 var box = $('#loginBox');
@@ -74,9 +75,8 @@
                         box.hide();
                     }
                 });
-            });
+            }); 
         </script>
-
     </head>
     <body>
         <!-- Header -->
@@ -141,8 +141,10 @@
         <div id="cbp-fwslider" class="cbp-fwslider wow fadeInLeft" data-wow-delay="0.4s" id="work">
             <div class="slider-line"></div>
             <ul>
-                <li><a href="#"><img src="<?php echo $this->basePath(); ?>/vintage/images/2.jpg" class="img-responsive" alt="img01"/></a></li>
-                <li><a href="#"><img src="<?php echo $this->basePath(); ?>/vintage/images/1.jpg" class="img-responsive" alt="img02"/></a></li>
+                <li><a href="#"><img src="<?= $this->basePath(); ?>/vintage/images/2.jpg" class="img-responsive" alt="img01"/></a></li>
+                <li><a href="#"><img src="<?= $this->basePath(); ?>/vintage/images/1.jpg" class="img-responsive" alt="img02"/></a></li>
+                <li><a href="#"><img src="<?= $this->basePath(); ?>/vintage/images/2.jpg" class="img-responsive" alt="img01"/></a></li>
+                <li><a href="#"><img src="<?= $this->basePath(); ?>/vintage/images/1.jpg" class="img-responsive" alt="img02"/></a></li>
             </ul>
         </div>
         <!-- Ends Header -->

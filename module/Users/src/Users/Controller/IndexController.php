@@ -38,6 +38,7 @@ class IndexController extends AbstractActionController {
         $auth = $this->getAuthService();
         if ($auth->hasIdentity()) {
             $this->setInfo();
+            print_r($this->info);
             $form = $this->getServiceLocator()->get('FormFactory')->getForm('Profile');
             $form->setData(array('user' => $this->info['user']));
             $view = new ViewModel(array('form' => $form, 'work' => $this->info['work']));
@@ -65,7 +66,7 @@ class IndexController extends AbstractActionController {
             $adapter->addValidator('IsImage', false);
             $adapter->addValidator('ImageSize', false, array(
                 'minWidth' => 50, 'minHeight' => 50,
-                'maxWidth' => 1024, 'maxHeight' => 768,
+                'maxWidth' => 2000, 'maxHeight' => 2000,
             ));
             $form = $this->getServiceLocator()->get('FormFactory')->getForm('Profile');
             $form->setValidationGroup(array(
@@ -97,13 +98,14 @@ class IndexController extends AbstractActionController {
                         $fileName, 'overwrite' => true));
                     if ($adapter->isUploaded($file)) {
                         if ($adapter->isValid($file)) {
+                            $counter[] = 'valid';
                             if ($adapter->receive($file)) {
                                 $this->generateThumbnail($fileName, $uploadPath);
                             }
                         }
                     }
                 }
-                return new \Zend\View\Model\JsonModel(array('done' => 'ok', 'data' => $data));
+                return new \Zend\View\Model\JsonModel(array('done' => 'ok', 'data' => $counter));
             }
             return new \Zend\View\Model\JsonModel(array('done' => 'invalid'));
         }
@@ -130,7 +132,7 @@ class IndexController extends AbstractActionController {
         $thumbnailFileName = 'tn_' . $imageFileName;
         $imageThumb = $this->getServiceLocator()->get('WebinoImageThumb');
         $thumb = $imageThumb->create($sourceImageFileName, $options = array());
-        $thumb->resize(75, 75);
+        $thumb->resize(340, 224);
         $thumb->save($path . '/' . $thumbnailFileName);
         return $thumbnailFileName;
     }

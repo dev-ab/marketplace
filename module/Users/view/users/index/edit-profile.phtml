@@ -1,18 +1,17 @@
 <section class="login">
     <?php
     $this->headScript()
-            ->prependFile($this->basePath() . '/js/dropzone.js')
-            ->prependFile($this->basePath() . '/js/dropzone-custom.js')
-            ->prependFile($this->basePath() . '/js/fancybox/source/jquery.fancybox.js')
-            ->prependFile($this->basePath() . '/js/fancybox/source/jquery.fancybox.pack.js')
-            ->prependFile($this->basePath() . '/js/fancybox/source/helpers/jquery.fancybox-buttons.js')
-            ->prependFile($this->basePath() . '/js/jquery-ui.js');
-    $this->headLink()->prependStylesheet($this->basePath() . '/css/dropzone.css')
-            ->prependStylesheet('//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/south-street/jquery-ui.css')
-            ->prependStylesheet($this->basePath() . '/css/fancybox/jquery.fancybox.css')
-            ->prependStylesheet($this->basePath() . '/css/fancybox/helpers/jquery.fancybox-buttons.css');
+            ->appendFile($this->basePath() . '/js/fancybox/source/jquery.fancybox.js')
+            ->appendFile($this->basePath() . '/js/fancybox/source/jquery.fancybox.pack.js')
+            ->appendFile($this->basePath() . '/js/fancybox/source/helpers/jquery.fancybox-buttons.js');
+    $this->headLink()
+            ->appendStylesheet($this->basePath() . '/css/dropzone.css')
+            ->appendStylesheet('//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/south-street/jquery-ui.css')
+            ->appendStylesheet($this->basePath() . '/css/fancybox/jquery.fancybox.css')
+            ->appendStylesheet($this->basePath() . '/css/fancybox/helpers/jquery.fancybox-buttons.css');
     ?>
     <script>
+        Dropzone.autoDiscover = false;
         $(document).ready(function () {
             $(".fancybox-button").fancybox({
                 prevEffect: 'none',
@@ -24,7 +23,7 @@
                 }
             });
             var myDropzone = new Dropzone("form#dropit",{
-                url: "<?= $this->url(null, array('controller' => 'Index', 'action' => 'uploadWork')); ?>",
+                url: "<?= $this->url('users/editprofile/processedit', array('action' => 'uploadwork')); ?>",
                 //maxFilesize: 2, // MB
                 maxFiles: 100,
                 autoProcessQueue: false,
@@ -73,13 +72,14 @@
             $('#edit_info').click(function (e) {
                 e.preventDefault();
                 $.ajax({
-                    url: '<?= $this->url(null, array('controller' => 'Index', 'action' => 'processEdit')); ?>',
+                    url: '<?= $this->url('users/editprofile/processedit', array('action' => 'processedit')); ?>',
                     type: 'post',
                     data: $('#Profile').serialize(),
                     success: function(data){
                         if(data.done == 'ok'){
                             alert('Info Updated!');
                         }else{
+                            alert(data);
                             alert('Invalid Data');
                         }
                     }
@@ -132,38 +132,37 @@
         <input name="work[url]" type="text" placeholder="Enter a link"><br><br>
         <button id="add_img">Add</button><br><br>
     </form>
-    <?php foreach ($work as $index => $array): ?>
-        <div style="border: 1px solid #000;width:150px;overflow:hidden;">
-            <a class="fancybox-button" rel="gallery1" href="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_b.jpg" title="<b>Westfield Waterfalls - Middletown CT Lower (Graham_CS)</b><br> http://www.google.com
-               the project displays the perfect of what I used to do before I was promoted as head of development team 
-               the project displays the perfect of what I used to do before I was promoted as head of development team 
-               the project displays the perfect of what I used to do before I was promoted as head of development team
-               the project displays the perfect of what I used to do before I was promoted as head of development team
-               the project displays the perfect of what I used to do before I was promoted as head of development team">
-                <img src="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_m.jpg" alt="" />
-            </a>
-            <div style="display:none;">
-                <a class="fancybox-button" rel="gallery1" href="http://farm4.staticflickr.com/3824/9041440555_2175b32078_b.jpg" title="Calm Before The Storm (One Shoe Photography Ltd.)">
-                    <img src="http://farm4.staticflickr.com/3824/9041440555_2175b32078_m.jpg" alt="" />
-                </a>
-                <a class="fancybox-button" rel="gallery1" href="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_b.jpg" title="Lambs Valley (JMImagesonline.com)">
-                    <img src="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_m.jpg" alt="" />
-                </a>
-                <a class="fancybox-button" rel="gallery1" href="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_b.jpg" title="Grasmere Lake (Phil 'the link' Whittaker (gizto29))">
-                    <img src="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_m.jpg" alt="" />
-                </a>
-            </div>
-        </div>
-    <?php endforeach; ?>
-    <div style="border: 1px solid #000;width:150px;overflow:hidden;">
-        <a class="fancybox-button" rel="gallery2" href="http://farm4.staticflickr.com/3824/9041440555_2175b32078_b.jpg" title="Calm Before The Storm (One Shoe Photography Ltd.)">
-            <img src="http://farm4.staticflickr.com/3824/9041440555_2175b32078_m.jpg" alt="" />
-        </a>
-        <div style="display:none;">
-            <a class="fancybox-button" rel="gallery2" href="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_b.jpg" title="Westfield Waterfalls - Middletown CT Lower (Graham_CS)">
-                <img src="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_m.jpg" alt="" />
-            </a>
-        </div>
-    </div>
+    <? if (!empty($this->work)) : ?>
+        <?php foreach ($this->work as $index => $array): ?>
+            <h4><?= $array['subject']; ?></h4>
+            <div class="ocarousel_slider">  
+                <div class="ocarousel example_photos" data-ocarousel-perscroll="3">
+                    <div class="ocarousel_window">
+                        <a class="fancybox-button img-responsive" rel="gallery1" href="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_b.jpg" title="<b>Westfield Waterfalls - Middletown CT Lower (Graham_CS)</b><br> http://www.google.com
+                           the project displays the perfect of what I used to do before I was promoted as head of development team 
+                           the project displays the perfect of what I used to do before I was promoted as head of development team 
+                           the project displays the perfect of what I used to do before I was promoted as head of development team
+                           the project displays the perfect of what I used to do before I was promoted as head of development team
+                           the project displays the perfect of what I used to do before I was promoted as head of development team">
+                            <img src="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_m.jpg" alt="" />
+                        </a>
+                        <a class="fancybox-button img-responsive" rel="gallery1" href="http://farm4.staticflickr.com/3824/9041440555_2175b32078_b.jpg" title="Calm Before The Storm (One Shoe Photography Ltd.)">
+                            <img src="http://farm4.staticflickr.com/3824/9041440555_2175b32078_m.jpg" alt="" />
+                        </a>
+                        <a class="fancybox-button img-responsive" rel="gallery1" href="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_b.jpg" title="Lambs Valley (JMImagesonline.com)">
+                            <img src="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_m.jpg" alt="" />
+                        </a>
+                        <a class="fancybox-button img-responsive" rel="gallery1" href="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_b.jpg" title="Grasmere Lake (Phil 'the link' Whittaker (gizto29))">
+                            <img src="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_m.jpg" alt="" />
+                        </a>
+                    </div>
+                    <span>           
+                        <a href="#" data-ocarousel-link="left" class="prev"><i class="fa fa-angle-left"></i> </a>
+                        <a href="#" data-ocarousel-link="right" class="next"> <i class="fa fa-angle-right"></i></a>
+                    </span>
+                </div>
+            </div> 
+        <?php endforeach; ?>
 
+    <? endif; ?>
 </section>
