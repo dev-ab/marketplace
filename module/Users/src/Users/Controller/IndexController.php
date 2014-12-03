@@ -23,9 +23,15 @@ class IndexController extends AbstractActionController {
         $portfolioTable = $model->getTable('users_portfolio');
         $this->info['work'] = $portfolioTable->getPortfolioByUser($this->info['user']['id']);
         foreach ($this->info['work'] as $index => $array) {
-            $all_imgs = glob($this->getFileUploadLocation('users_files', $this->info['user']['id'] . '/portfolio/' . $array['id']) . '/*');
-            $thumbs = glob($this->getFileUploadLocation('users_files', $this->info['user']['id'] . '/portfolio/' . $array['id']) . '/tn_*');
-            $this->info['work'][$index]['img'] = array_diff($all_imgs, $thumbs);
+            $all_imgs = glob($this->getFileUploadLocation('users_files', '/' . $this->info['user']['id'] . '/portfolio/' . $array['id']) . '/*');
+            $thumbs = glob($this->getFileUploadLocation('users_files', '/' . $this->info['user']['id'] . '/portfolio/' . $array['id']) . '/tn_*');
+            $fulls = array_diff($all_imgs, $thumbs);
+            $this->info['work'][$index]['img_thumb'] = array_map(function($val) {
+                        return substr($val, strpos($val, '/users/') + 7);
+                    }, $thumbs);
+            $this->info['work'][$index]['img'] = array_map(function($val) {
+                        return substr($val, strpos($val, '/users/') + 7);
+                    }, $fulls);
         }
     }
 
@@ -38,7 +44,7 @@ class IndexController extends AbstractActionController {
         $auth = $this->getAuthService();
         if ($auth->hasIdentity()) {
             $this->setInfo();
-            print_r($this->info);
+            //print_r($this->info);
             $form = $this->getServiceLocator()->get('FormFactory')->getForm('Profile');
             $form->setData(array('user' => $this->info['user']));
             $view = new ViewModel(array('form' => $form, 'work' => $this->info['work']));
@@ -51,7 +57,7 @@ class IndexController extends AbstractActionController {
     public function getFileUploadLocation($name = 'upload_location', $subfolder = null) {
         // Fetch Configuration from Module Config
         $config = $this->getServiceLocator()->get('config');
-        $dir = $subfolder ? $config['module_config'][$name] . "/$subfolder" : $config['module_config'][$name];
+        $dir = $config['module_config'][$name] . $subfolder;
         if (!file_exists($dir) && !is_dir($dir)) {
             mkdir($dir, '0777', true);
         }
@@ -84,7 +90,7 @@ class IndexController extends AbstractActionController {
                 $data['work']['type'] = 1;
                 $data['work']['time'] = time();
                 $new_work = $portfolioTable->savePortfolio($data['work']);
-                $uploadPath = $this->getFileUploadLocation('users_files', $this->info['user']['id'] . '/portfolio/' . $new_work);
+                $uploadPath = $this->getFileUploadLocation('users_files', '/' . $this->info['user']['id'] . '/portfolio/' . $new_work);
                 foreach ($files as $file => $fileInfo) {
                     $fileName = $fileInfo['name'];
                     $attempts = 0;
@@ -105,7 +111,7 @@ class IndexController extends AbstractActionController {
                         }
                     }
                 }
-                return new \Zend\View\Model\JsonModel(array('done' => 'ok', 'data' => $counter));
+                return new \Zend\View\Model\JsonModel(array('done' => 'ok', 'data' => $counter, 'error' => 'couldn\'t upload'));
             }
             return new \Zend\View\Model\JsonModel(array('done' => 'invalid'));
         }
@@ -125,6 +131,28 @@ class IndexController extends AbstractActionController {
             }
         }
         return new \Zend\View\Model\JsonModel(array('done' => 'invalid'));
+    }
+
+    public function imageAction() {
+        $route = $this->params()->fromRoute();
+        //print_r($route);
+        $filename = $this->getFileUploadLocation('users_files', $route['sub'] . $route['file']);
+        //echo $filename;
+        //return new \Zend\View\Model\JsonModel(array('done' => 'ok'));
+
+        $file = file_get_contents($filename);
+        //Directly return the Response
+        $response = $this->getEvent()->getResponse();
+        $response->getHeaders()->addHeaders(array(
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment;filename="' . $route['file'] . '"',
+        ));
+        $response->setContent($file);
+        return $response;
+    }
+
+    public function image_link($path) {
+        
     }
 
     public function generateThumbnail($imageFileName, $path) {

@@ -23,7 +23,7 @@
                 }
             });
             var myDropzone = new Dropzone("form#dropit",{
-                url: "<?= $this->url('users/editprofile/processedit', array('action' => 'uploadwork')); ?>",
+                url: "<?= $this->url('users/editprofile/sub', array('action' => 'uploadwork')); ?>",
                 //maxFilesize: 2, // MB
                 maxFiles: 100,
                 autoProcessQueue: false,
@@ -41,14 +41,14 @@
                     });
 
                     this.on("successmultiple", function (files, response) {
-                        alert(JSON.stringify(response));
+                        //alert(JSON.stringify(response));
                         /*jQuery.each(files, function(index, value) {
                             jQuery.each(value, function(inde, valu) {
                             alert(inde+' : '+valu); 
                             });    
                         });*/
                         if(response.done == 'ok'){
-                            alert('project added successfully!');
+                            $.notify("Work Project Saved Successfully.", {position:"top-left",className: 'success'});
                             this.removeAllFiles();
                         }else{
                             alert('Invalid Data');
@@ -72,15 +72,14 @@
             $('#edit_info').click(function (e) {
                 e.preventDefault();
                 $.ajax({
-                    url: '<?= $this->url('users/editprofile/processedit', array('action' => 'processedit')); ?>',
+                    url: '<?= $this->url('users/editprofile/sub', array('action' => 'processedit')); ?>',
                     type: 'post',
                     data: $('#Profile').serialize(),
                     success: function(data){
                         if(data.done == 'ok'){
-                            alert('Info Updated!');
+                            $.notify("Personal Info Successfully Updated.", {position:"top-left",className: 'success'});
                         }else{
-                            alert(data);
-                            alert('Invalid Data');
+                            $.notify("Personal Info Update Unsuccessful.", {position:"top-left",className: 'error'});
                         }
                     }
                 });
@@ -134,27 +133,18 @@
     </form>
     <? if (!empty($this->work)) : ?>
         <?php foreach ($this->work as $index => $array): ?>
-            <h4><?= $array['subject']; ?></h4>
+            <h3><?= $array['subject']; ?></h3>
             <div class="ocarousel_slider">  
                 <div class="ocarousel example_photos" data-ocarousel-perscroll="3">
                     <div class="ocarousel_window">
-                        <a class="fancybox-button img-responsive" rel="gallery1" href="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_b.jpg" title="<b>Westfield Waterfalls - Middletown CT Lower (Graham_CS)</b><br> http://www.google.com
-                           the project displays the perfect of what I used to do before I was promoted as head of development team 
-                           the project displays the perfect of what I used to do before I was promoted as head of development team 
-                           the project displays the perfect of what I used to do before I was promoted as head of development team
-                           the project displays the perfect of what I used to do before I was promoted as head of development team
-                           the project displays the perfect of what I used to do before I was promoted as head of development team">
-                            <img src="http://farm6.staticflickr.com/5471/9036958611_fa1bb7f827_m.jpg" alt="" />
+                        <a class="fancybox-button img-responsive" rel="gallery<?= $array['id']; ?>" href="image/Portfolio.png" title="<?= $array['description']; ?>">
+                            <img style="width:340px;height:224;" src="image/Portfolio.png" alt="">
                         </a>
-                        <a class="fancybox-button img-responsive" rel="gallery1" href="http://farm4.staticflickr.com/3824/9041440555_2175b32078_b.jpg" title="Calm Before The Storm (One Shoe Photography Ltd.)">
-                            <img src="http://farm4.staticflickr.com/3824/9041440555_2175b32078_m.jpg" alt="" />
-                        </a>
-                        <a class="fancybox-button img-responsive" rel="gallery1" href="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_b.jpg" title="Lambs Valley (JMImagesonline.com)">
-                            <img src="http://farm3.staticflickr.com/2870/8985207189_01ea27882d_m.jpg" alt="" />
-                        </a>
-                        <a class="fancybox-button img-responsive" rel="gallery1" href="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_b.jpg" title="Grasmere Lake (Phil 'the link' Whittaker (gizto29))">
-                            <img src="http://farm4.staticflickr.com/3677/8962691008_7f489395c9_m.jpg" alt="" />
-                        </a>
+                        <?php foreach ($array['img'] as $img): ?>
+                            <a class="fancybox-button img-responsive" rel="gallery<?= $array['id']; ?>" href="<?= "image/$img"; ?>" title="">
+                                <img style="width:340px;height:224;" src="<?= "image/$img"; ?>" alt="" />
+                            </a>
+                        <?php endforeach; ?>
                     </div>
                     <span>           
                         <a href="#" data-ocarousel-link="left" class="prev"><i class="fa fa-angle-left"></i> </a>

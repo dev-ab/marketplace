@@ -41,7 +41,7 @@ return array(
                         ),
                         'may_terminate' => true,
                         'child_routes' => array(
-                            'processedit' => array(
+                            'sub' => array(
                                 'type' => 'Segment',
                                 'options' => array(
                                     'route' => '/[:action]',
@@ -54,6 +54,20 @@ return array(
                                 ),
                             ),
                         )
+                    ),
+                    'image' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/image[:sub[:file]]',
+                            'constraints' => array(
+                                'sub' => '(/[a-zA-z0-9-_]+)*/',
+                                'file' => '.*\.(jpg|jpeg|png)',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Users\Controller\Index',
+                                'action' => 'image',
+                            ),
+                        ),
                     ),
                     'user-manager' => array(
                         'type' => 'Segment',
